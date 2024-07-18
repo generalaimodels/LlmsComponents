@@ -1,68 +1,66 @@
 import torch
-import Neural_Network as nn
-from xformers.components.attention.compositional import  CompositionalAttention
-from xformers.components.attention.base import Attention
-
-
-model=CompositionalAttention(
-    dim_model=512,
-    num_heads=8,
-    
+from LLMs_model.Mistral_Model import Mistral_model, ModelArgs, LoraArgs
+args = ModelArgs(
+    dim=512,
+    n_layers=12,
+    head_dim=64,
+    hidden_dim=2048,
+    n_heads=8,
+    n_kv_heads=8,
+    norm_eps=1e-6,
+    vocab_size=10000,
+    rope_theta=10000.0,
+    lora=LoraArgs(
+        enable=True,
+        rank=16,
+        dropout=0.0,
+        scaling=2.0,
+    ),
+    moe=None,
 )
+print(args)
+print(args.vocab_size)
 
+# Initialize the model
+model = Mistral_model(args)
 
-q=torch.rand(1,10,512)
-v=torch.rand(1,10,512)
-k=torch.rand(1,10,512)
-output=model(q,k,v)
-print(output.shape)
+# Create dummy input
+batch_size = 2
+seq_length = 10
+input_ids = torch.randint(0, args.vocab_size, (batch_size, seq_length))
 
-# Create an embedding module containing 10 tensors of size 3
-embedding = nn.Embedding(num_embeddings=10, embedding_dim=3)
+# Flatten the input_ids
+input_ids_flat = input_ids.reshape(-1)
 
-# Example input: a batch of 2 samples of 4 indices each
-input_indices = torch.LongTensor([[1, 2, 4, 5], [4, 3, 2, 9]])
+# Create dummy sequence lengths
+seqlens = [seq_length] * batch_size
 
-# Retrieve the embeddings for the given indices
-output = embedding(input_indices)
-print("Embeddings for input indices:")
-print(output)
+# Forward pass
+output = model(input_ids_flat, seqlens)
 
-# Example with padding_idx
-embedding_with_padding = nn.Embedding(num_embeddings=10, embedding_dim=3, padding_idx=0)
-input_indices_with_padding = torch.LongTensor([[0, 2, 0, 5]])
-output_with_padding = embedding_with_padding(input_indices_with_padding)
-print("Embeddings with padding_idx:")
-print(output_with_padding)
+# Print output shape
+print(f"Output shape: {output.shape}")
 
-# Changing the padding vector
-padding_idx = 0
-embedding_with_custom_padding = nn.Embedding(num_embeddings=3, embedding_dim=3, padding_idx=padding_idx)
-with torch.no_grad():
-    embedding_with_custom_padding.weight[padding_idx] = torch.ones(3)
-input_indices_custom_padding = torch.LongTensor([[0, 1, 2]])
-output_custom_padding = embedding_with_custom_padding(input_indices_custom_padding)
-print("Embeddings with custom padding vector:")
-print(output_custom_padding)
+# Check if the output is valid
+assert output.shape == (batch_size * seq_length, args.vocab_size), "Output shape mismatch"
+print("Test passed successfully!")
 
 
 import torch
-import torch.nn as nn
+from Multi_data_understand import clip
+from PIL import Image
 
-# Create an embedding module with various parameters
-embedding = nn.Embedding(
-    num_embeddings=10000,  # Vocabulary size
-    embedding_dim=3,       # Embedding dimensionality
-    padding_idx=0,         # Padding index
-    max_norm=1.0,          # Maximum norm for embeddings
-    norm_type=2,           # Type of norm (Euclidean)
- scale_grad_by_freq=True,  # Scale gradients by frequency
-    sparse=False,          # Dense gradients
-    device='cpu',          # Create on cpu
-    dtype=torch.float32    # Data type
-)
-# Example input: a batch of 2 samples of 4 indices each
-input_indices = torch.LongTensor([[0, 2, 4, 5], [4, 3, 2, 9]]).to('cpu')
-# Retrieve the embeddings for the given indices
-output = embedding(input_indices)
-print(output)
+device = "cuda" if torch.cuda.is_available() else "cpu"
+model, preprocess = clip.load("ViT-B/32", device=device)
+
+image = preprocess(Image.open("CLIP.png")).unsqueeze(0).to(device)
+text = clip.tokenize(["a diagram", "a dog", "a cat"]).to(device)
+
+with torch.no_grad():
+    image_features = model.encode_image(image)
+    text_features = model.encode_text(text)
+    
+    logits_per_image, logits_per_text = model(image, text)
+    probs = logits_per_image.softmax(dim=-1).cpu().numpy()
+
+print("Label probs:", probs)  # prints: [[0.9927937  0.00421068 0.00299572]]
