@@ -18,6 +18,7 @@ def _reset_is_causal(num_query_tokens: int, num_key_tokens: int, original_is_cau
     return original_is_causal
 
 def scaled_multihead_dot_product_attention(query, key, value, n_heads, past_key_value=None, softmax_scale=None, attn_bias=None, key_padding_mask=None, is_causal=False, dropout_p=0.0, training=False, needs_weights=False, multiquery=False):
+
     q = rearrange(query, 'b s (h d) -> b h s d', h=n_heads)
     kv_n_heads = 1 if multiquery else n_heads
     k = rearrange(key, 'b s (h d) -> b h d s', h=kv_n_heads)
