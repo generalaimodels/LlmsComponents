@@ -1,0 +1,323 @@
+import json
+from typing import Dict, List, Optional
+from transformers import AutoTokenizer
+
+
+class PromptTemplate:
+    def __init__(
+        self,
+        role: str,
+        content: str,
+        instruction: str,
+        response: Optional[str] = None,
+        max_length: int = 512
+    ):
+        self.role = role
+        self.content = content
+        self.instruction = instruction
+        self.response = response
+        self.max_length = max_length
+        self.tokenizer = AutoTokenizer.from_pretrained("gpt2")
+
+    def generate_prompt(self) -> str:
+        """
+        Generate a formatted prompt string.
+        """
+        prompt = f"Role: {self.role}\n"
+        prompt += f"Content: {self.content}\n"
+        prompt += f"Instruction: {self.instruction}\n"
+        if self.response:
+            prompt += f"Response: {self.response}"
+        return prompt
+
+    def tokenize_prompt(self) -> Dict[str, List[int]]:
+        """
+        Tokenize the generated prompt.
+        """
+        prompt = self.generate_prompt()
+        return self.tokenizer(
+            prompt,
+            truncation=True,
+            padding="max_length",
+            max_length=self.max_length,
+            return_tensors="pt"
+        )
+
+    def to_json(self) -> str:
+        """
+        Convert the prompt template to a JSON string.
+        """
+        return json.dumps({
+            "role": self.role,
+            "content": self.content,
+            "instruction": self.instruction,
+            "response": self.response,
+            "max_length": self.max_length
+        })
+
+    @classmethod
+    def from_json(cls, json_str: str) -> 'PromptTemplate':
+        """
+        Create a PromptTemplate instance from a JSON string.
+        """
+        data = json.loads(json_str)
+        return cls(**data)
+
+
+def create_prompt_template(
+    role: str,
+    content: str,
+    instruction: str,
+    response: Optional[str] = None,
+    max_length: int = 512
+) -> PromptTemplate:
+    """
+    Create a PromptTemplate instance with the given parameters.
+    """
+    return PromptTemplate(role, content, instruction, response, max_length)
+
+
+def main():
+    # Example usage
+    prompt = create_prompt_template(
+        role="AI Assistant",
+        content="You are a helpful AI assistant.",
+        instruction="Provide a brief introduction about yourself.",
+        max_length=256
+    )
+
+    print("Generated Prompt:")
+    print(prompt.generate_prompt())
+
+    print("\nTokenized Prompt:")
+    print(prompt.tokenize_prompt())
+
+    print("\nJSON Representation:")
+    json_str = prompt.to_json()
+    print(json_str)
+
+    print("\nRecreated Prompt Template from JSON:")
+    recreated_prompt = PromptTemplate.from_json(json_str)
+    print(recreated_prompt.generate_prompt())
+
+
+if __name__ == "__main__":
+    main()
+    
+    
+    import json
+from typing import Dict, List, Optional
+from transformers import AutoTokenizer
+
+
+class PromptTemplate:
+    def __init__(
+        self,
+        role: str,
+        content: str,
+        instruction: str,
+        response: Optional[str] = None,
+        max_length: int = 512
+    ):
+        self.role = role
+        self.content = content
+        self.instruction = instruction
+        self.response = response
+        self.max_length = max_length
+        self.tokenizer = AutoTokenizer.from_pretrained("gpt2")
+
+    def generate_prompt(self) -> str:
+        """
+        Generate a formatted prompt string.
+        """
+        prompt = f"Role: {self.role}\n"
+        prompt += f"Content: {self.content}\n"
+        prompt += f"Instruction: {self.instruction}\n"
+        if self.response:
+            prompt += f"Response: {self.response}"
+        return prompt
+
+    def tokenize_prompt(self) -> Dict[str, List[int]]:
+        """
+        Tokenize the generated prompt.
+        """
+        prompt = self.generate_prompt()
+        return self.tokenizer(
+            prompt,
+            truncation=True,
+            padding="max_length",
+            max_length=self.max_length,
+            return_tensors="pt"
+        )
+
+    def to_json(self) -> str:
+        """
+        Convert the prompt template to a JSON string.
+        """
+        return json.dumps({
+            "role": self.role,
+            "content": self.content,
+            "instruction": self.instruction,
+            "response": self.response,
+            "max_length": self.max_length
+        })
+
+    @classmethod
+    def from_json(cls, json_str: str) -> 'PromptTemplate':
+        """
+        Create a PromptTemplate instance from a JSON string.
+        """
+        data = json.loads(json_str)
+        return cls(**data)
+
+
+def create_prompt_template(
+    role: str,
+    content: str,
+    instruction: str,
+    response: Optional[str] = None,
+    max_length: int = 512
+) -> PromptTemplate:
+    """
+    Create a PromptTemplate instance with the given parameters.
+    """
+    return PromptTemplate(role, content, instruction, response, max_length)
+
+
+def main():
+    # Example usage
+    prompt = create_prompt_template(
+        role="AI Assistant",
+        content="You are a helpful AI assistant.",
+        instruction="Provide a brief introduction about yourself.",
+        max_length=256
+    )
+
+    print("Generated Prompt:")
+    print(prompt.generate_prompt())
+
+    print("\nTokenized Prompt:")
+    print(prompt.tokenize_prompt())
+
+    print("\nJSON Representation:")
+    json_str = prompt.to_json()
+    print(json_str)
+
+    print("\nRecreated Prompt Template from JSON:")
+    recreated_prompt = PromptTemplate.from_json(json_str)
+    print(recreated_prompt.generate_prompt())
+
+
+if __name__ == "__main__":
+    main()
+    
+    
+from typing import Dict, Any, Optional
+from dataclasses import dataclass, field
+
+@dataclass
+class PromptTemplate:
+    role: str
+    content: str
+    parameters: Dict[str, Any] = field(default_factory=dict)
+    context: Optional[str] = None
+    examples: Optional[list] = None
+    constraints: Optional[list] = None
+    output_format: Optional[str] = None
+    
+    def format(self, **kwargs) -> str:
+        formatted_content = self.content.format(**kwargs, **self.parameters)
+        
+        prompt_parts = [
+            f"Role: {self.role}",
+            f"Task: {formatted_content}"
+        ]
+        
+        if self.context:
+            prompt_parts.append(f"Context: {self.context}")
+        
+        if self.examples:
+            prompt_parts.append("Examples:")
+            for example in self.examples:
+                prompt_parts.append(f"- {example}")
+        
+        if self.constraints:
+            prompt_parts.append("Constraints:")
+            for constraint in self.constraints:
+                prompt_parts.append(f"- {constraint}")
+        
+        if self.output_format:
+            prompt_parts.append(f"Output Format: {self.output_format}")
+        
+        return "\n\n".join(prompt_parts)
+
+# Example usage
+advanced_python_template = PromptTemplate(
+    role="Advanced Python Developer",
+    content="Implement a {task} using advanced Python techniques. The solution should be efficient, readable, and follow best practices.",
+    parameters={"complexity": "high"},
+    context="You are working on a large-scale Python project that requires optimal performance and maintainability.",
+    examples=[
+        "Implement a concurrent web scraper using asyncio and aiohttp",
+        "Create a memory-efficient data processing pipeline using generators and itertools"
+    ],
+    constraints=[
+        "Use type hints for all function signatures",
+        "Implement proper error handling and logging",
+        "Optimize for both time and space complexity",
+        "Follow PEP 8 style guidelines"
+    ],
+    output_format="Provide the Python code along with brief comments explaining key design decisions and any advanced techniques used."
+)
+
+# Generate the prompt
+prompt = advanced_python_template.format(task="custom caching mechanism for expensive function calls")
+print(prompt)
+
+
+class PromptTemplate:
+    def __init__(self, role, content_template, **kwargs):
+        self.role = role
+        self.content_template = content_template
+        self.context = kwargs
+
+    def fill_template(self, **kwargs):
+        filled_content = self.content_template.format(**{**self.context, **kwargs})
+        return f"Role: {self.role}\n\n{filled_content}"
+
+# Example roles and content templates
+roles = {
+    'customer_support': "You are a customer support agent. Respond to the customer's issue and provide a solution.\n\nCustomer: {customer_message}\nSupport Agent: {agent_response}",
+    'personal_assistant': "You are a personal assistant. Help the user to manage their tasks and schedule.\n\nUser: {user_message}\nAssistant: {assistant_response}",
+    'tutor': "You are a tutor. Provide a clear and concise explanation on the given topic.\n\nStudent: {student_question}\nTutor: {tutor_response}"
+}
+
+# Example usage
+def generate_prompt(role, **kwargs):
+    if role not in roles:
+        raise ValueError("Role not found.")
+    content_template = roles[role]
+    prompt_template = PromptTemplate(role, content_template, **kwargs)
+    return prompt_template.fill_template(**kwargs)
+
+# Example conversations
+customer_support_prompt = generate_prompt(
+    role='customer_support', 
+    customer_message="I can't access my account.", 
+    agent_response="Let's try resetting your password. Click on 'Forgot Password' on the login page and follow the instructions."
+)
+print(customer_support_prompt)
+
+personal_assistant_prompt = generate_prompt(
+    role='personal_assistant', 
+    user_message="I need to set up a meeting with John.", 
+    assistant_response="I have scheduled a meeting with John for tomorrow at 2 PM."
+)
+print(personal_assistant_prompt)
+
+tutor_prompt = generate_prompt(
+    role='tutor', 
+    student_question="Can you explain Newton's second law of motion?", 
+    tutor_response="Newton's second law states that force is equal to mass times acceleration (F = ma). This means that the force acting on an object is directly proportional to the mass of the object and its acceleration."
+)
+print(tutor_prompt)
