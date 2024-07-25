@@ -133,8 +133,8 @@ def create_advanced_python_template() -> PromptTemplate:
             "Choose appropriate data structures and algorithms for each component",
             "Implement the solution with a focus on readability and maintainability",
             "Refactor and optimize the code, ensuring it adheres to all constraints",
-            "Add comprehensive error handling and logging",
-            "Document the code and explain key design decisions"
+            "Add comprehensive error handling and logging  ",
+            # "Document the code and explain key design decisions"
         ]
     )
 
@@ -146,8 +146,8 @@ if __name__ == "__main__":
     
     # Demonstrate JSON serialization and deserialization
     json_str = template.to_json()
-    print("\nJSON representation:")
-    print(json_str)
+    # print("\nJSON representation:")
+    # print(json_str)
     
     reconstructed_template = PromptTemplate.from_json(json_str)
     print("\nReconstructed prompt:")
@@ -155,68 +155,68 @@ if __name__ == "__main__":
 
 
 
-from typing import Dict, Any
+# from typing import Dict, Any
 
-class PromptTemplate:
-    def __init__(self, role: str, content_template: str, **kwargs: Any) -> None:
-        self.role = role
-        self.content_template = content_template
-        self.context = kwargs
+# class PromptTemplate:
+#     def __init__(self, role: str, content_template: str, **kwargs: Any) -> None:
+#         self.role = role
+#         self.content_template = content_template
+#         self.context = kwargs
 
-    def fill_template(self, **kwargs: Any) -> str:
-        context_combined = {**self.context, **kwargs}
-        filled_content = self.content_template.format(**context_combined)
-        return f"Role: {self.role}\n\n{filled_content}"
-
-
-def generate_prompt(role: str, roles_dict: Dict[str, str], **kwargs: Any) -> str:
-    if role not in roles_dict:
-        raise ValueError(f"Role '{role}' not found.")
-    content_template = roles_dict[role]
-    prompt_template = PromptTemplate(role, content_template, **kwargs)
-    return prompt_template.fill_template(**kwargs)
+#     def fill_template(self, **kwargs: Any) -> str:
+#         context_combined = {**self.context, **kwargs}
+#         filled_content = self.content_template.format(**context_combined)
+#         return f"Role: {self.role}\n\n{filled_content}"
 
 
-if __name__ == "__main__":
-    roles = {
-        'customer_support': (
-            "You are a customer support agent. Respond to the customer's issue and provide a solution.\n\n"
-            "Customer: {customer_message}\nSupport Agent: {agent_response}"
-        ),
-        'personal_assistant': (
-            "You are a personal assistant. Help the user to manage their tasks and schedule.\n\n"
-            "User: {user_message}\nAssistant: {assistant_response}"
-        ),
-        'tutor': (
-            "You are a tutor. Provide a clear and concise explanation on the given topic.\n\n"
-            "Student: {student_question}\nTutor: {tutor_response}"
-        )
-    }
+# def generate_prompt(role: str, roles_dict: Dict[str, str], **kwargs: Any) -> str:
+#     if role not in roles_dict:
+#         raise ValueError(f"Role '{role}' not found.")
+#     content_template = roles_dict[role]
+#     prompt_template = PromptTemplate(role, content_template, **kwargs)
+#     return prompt_template.fill_template(**kwargs)
 
-    try:
-        customer_support_prompt = generate_prompt(
-            role='customer_support',
-            roles_dict=roles,
-            customer_message="I can't access my account.",
-            agent_response="Let's try resetting your password. Click on 'Forgot Password' on the login page and follow the instructions."
-        )
-        print(customer_support_prompt)
 
-        personal_assistant_prompt = generate_prompt(
-            role='personal_assistant',
-            roles_dict=roles,
-            user_message="I need to set up a meeting with John.",
-            assistant_response="I have scheduled a meeting with John for tomorrow at 2 PM."
-        )
-        print(personal_assistant_prompt)
+# if __name__ == "__main__":
+#     roles = {
+#         'customer_support': (
+#             "You are a customer support agent. Respond to the customer's issue and provide a solution.\n\n"
+#             "Customer: {customer_message}\nSupport Agent: {agent_response}"
+#         ),
+#         'personal_assistant': (
+#             "You are a personal assistant. Help the user to manage their tasks and schedule.\n\n"
+#             "User: {user_message}\nAssistant: {assistant_response}"
+#         ),
+#         'tutor': (
+#             "You are a tutor. Provide a clear and concise explanation on the given topic.\n\n"
+#             "Student: {student_question}\nTutor: {tutor_response}"
+#         )
+#     }
 
-        tutor_prompt = generate_prompt(
-            role='tutor',
-            roles_dict=roles,
-            student_question="Can you explain Newton's second law of motion?",
-            tutor_response="Newton's second law states that force is equal to mass times acceleration (F = ma). This means that the force acting on an object is directly proportional to the mass of the object and its acceleration."
-        )
-        print(tutor_prompt)
+#     try:
+#         customer_support_prompt = generate_prompt(
+#             role='customer_support',
+#             roles_dict=roles,
+#             customer_message="I can't access my account.",
+#             agent_response="Let's try resetting your password. Click on 'Forgot Password' on the login page and follow the instructions."
+#         )
+#         print(customer_support_prompt)
 
-    except ValueError as e:
-        print(f"Error: {e}")
+#         personal_assistant_prompt = generate_prompt(
+#             role='personal_assistant',
+#             roles_dict=roles,
+#             user_message="I need to set up a meeting with John.",
+#             assistant_response="I have scheduled a meeting with John for tomorrow at 2 PM."
+#         )
+#         print(personal_assistant_prompt)
+
+#         tutor_prompt = generate_prompt(
+#             role='tutor',
+#             roles_dict=roles,
+#             student_question="Can you explain Newton's second law of motion?",
+#             tutor_response="Newton's second law states that force is equal to mass times acceleration (F = ma). This means that the force acting on an object is directly proportional to the mass of the object and its acceleration."
+#         )
+#         print(tutor_prompt)
+
+#     except ValueError as e:
+#         print(f"Error: {e}")
