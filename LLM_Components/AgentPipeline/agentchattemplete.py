@@ -19,8 +19,7 @@ class AgentChatTokenizer:
         self.tokenizer, self.model = self._load_model_and_tokenizer()
 
     def _load_model_and_tokenizer(self) -> tuple[AutoTokenizer, AutoModelForCausalLM]:
-        tokenizer = AutoTokenizer.from_pretrained(self.model_name,*self.model_args,
-            **self.kwargs)
+        tokenizer = AutoTokenizer.from_pretrained(self.model_name,*self.model_args,**self.kwargs)
         
         quantization_config = None
         if self.quantization:
@@ -47,7 +46,7 @@ class AgentChatTokenizer:
 
     def encode(self, chat_data: List[Dict[str, Union[str, List[str]]]]) -> Dict[str, torch.Tensor]:
         prompt = self._format_chat_data(chat_data)
-        return self.tokenizer(prompt, return_tensors="pt").to(self.device)
+        return self.tokenizer(prompt, return_tensors="pt")
 
     def decode(self, model_output: torch.Tensor) -> str:
         return self.tokenizer.decode(model_output[0], skip_special_tokens=True)
@@ -93,8 +92,12 @@ class AgentChatTokenizer:
                 prompt_parts.append(f"Output format: {item['output_format']}")
         return "\n".join(prompt_parts)
 
+
+
+
 def create_pipeline(
-    model_name: str,
+    model: AutoModelForCausalLM,
+    tokenizer: AutoTokenizer,
     task: str = "text-generation",
     quantization: Optional[str] = None,
     **kwargs: Any
@@ -113,8 +116,8 @@ def create_pipeline(
 
     return pipeline(
         task=task,
-        model=model_name,
-        tokenizer=model_name,
+        model=model,
+        tokenizer=tokenizer,
         device_map="auto",
         torch_dtype=torch.float16,
         trust_remote_code=True,
