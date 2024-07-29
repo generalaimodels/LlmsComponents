@@ -60,7 +60,7 @@ class ModelLoadingError(Exception):
     """Custom exception for model loading errors."""
     pass
 
-class AgentAIModel:
+class AgentModel:
     model_classes = {
         "causal_lm": AutoModelForCausalLM,
         "masked_lm": AutoModelForMaskedLM,

@@ -26,9 +26,10 @@ class AgentChatTokenizer:
             quantization_config = BitsAndBytesConfig(
                 load_in_8bit=(self.quantization == "8bit"),
                 load_in_4bit=(self.quantization == "4bit"),
+                llm_int8_enable_fp32_cpu_offload=(self.quantization == "map"),
                 llm_int8_threshold=6.0,
                 llm_int8_has_fp16_weight=False,
-                bnb_4bit_compute_dtype=torch.float16,
+                bnb_4bit_compute_dtype= torch.float16,
                 bnb_4bit_use_double_quant=True,
                 bnb_4bit_quant_type="nf4",
             )
@@ -95,7 +96,7 @@ class AgentChatTokenizer:
 
 
 
-def create_pipeline(
+def AgentCreatePipeline(
     model: AutoModelForCausalLM,
     tokenizer: AutoTokenizer,
     task: str = "text-generation",
@@ -126,20 +127,6 @@ def create_pipeline(
         **kwargs
     )
 
-# # Example usage
-# if __name__ == "__main__":
-#     model_name = "gpt2"  # Replace with your preferred model
-#     chat_tokenizer = ChatTokenizer(model_name, quantization=None,cache_dir=r"C:\Users\heman\Desktop\components\model")
 
-#     chat_data = [
-#         {"role": "AI Assistant"},
-#         {"content": "Explain quantum computing in simple terms."},
-#         {"example": ["Quantum computing is like a super-fast calculator that can solve complex problems."]},
-#         {"constraints": ["Use simple language", "Avoid technical jargon"]},
-#         {"output_format": "A brief paragraph explanation"}
-#     ]
-
-#     response = chat_tokenizer.generate_response(chat_data)
-#     print(response)
 
    
