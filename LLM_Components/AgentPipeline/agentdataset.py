@@ -215,7 +215,7 @@ class AgentDatasetLoader:
                 metadata = {
                 'dataset_name': dataset_name,
                 'features': ", ".join(features),
-                'num_rows': str(i),
+                'row_num': str(i),
                 "row_content": row_content,
                 }
                 meta_data.append(metadata)

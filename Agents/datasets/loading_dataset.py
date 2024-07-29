@@ -1,6 +1,3 @@
-# LlmsComponents
-
-
 import json
 import csv
 from pathlib import Path
@@ -26,7 +23,7 @@ def load_documents(folder_path: str) -> List[Dict[str, str]]:
                 df = pd.read_csv(file_path)
                 for _, row in df.iterrows():
                     documents.append({"content": " ".join(row.astype(str)), "source": str(file_path)})
-            elif file_path.suffix in (".json", ".jsonl"):
+            elif file_path.suffix in (".json", ".jsonl",".yml"):
                 with open(file_path, "r", encoding="utf-8") as f:
                     for line in f:
                         data = json.loads(line)
@@ -63,15 +60,17 @@ def process_dataset(dataset_path: str) -> List[Document]:
 
 # Example usage
 if __name__ == "__main__":
-    folder_path = "path/to/your/folder"
-    dataset_path = "path/to/your/dataset"
+    folder_path = r"C:\Users\heman\Desktop\components\output"
+    dataset_path = r"C:\Users\heman\Desktop\components\output"
 
     # Load documents from the folder
     documents = load_documents(folder_path)
-    for doc in documents:
-        print(doc)
+    print(len(documents))
+    # for doc in documents:
+    #     print(doc)
 
-    # Process dataset
-    knowledge_base = process_dataset(dataset_path)
-    for doc in knowledge_base:
-        print(doc)
+    # # Process dataset
+    # knowledge_base = process_dataset(dataset_path)
+    # # for doc in knowledge_base:
+    # #     print(doc)
+    # print(len(knowledge_base))
