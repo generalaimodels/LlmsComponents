@@ -255,14 +255,6 @@ class AgentPreProcessorPipeline:
         pretrained_model_name_or_path (str): The pre-trained model name or path.
         **kwargs: Additional keyword arguments passed to the `from_pretrained` methods.
         
-        # if __name__ == "__main__":
-               #     text_wrapper = AdvancedDataProcessForHemanth(
-               #         "text", "bert-base-uncased", revision="main", 
-               #         cache_dir="./model"
-               #     ) 
-               #     text_data = "This is a test sentence."
-               #     processed_text = text_wrapper.process_data(text_data)
-               #     print(processed_text)
 
     """
 
@@ -358,6 +350,7 @@ class AgentPreProcessorPipeline:
             self._config = AutoConfig.from_pretrained(
                 self.pretrained_model_name_or_path, **self.from_pretrained_kwargs
             )
+            logging.info(f"Agent Preprocessor Pipeline Config  ....\n {self._config}")
         return self._config
 
     def process_data(self):
