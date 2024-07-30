@@ -1,10 +1,9 @@
-from typing import List, Dict, Union, Optional, Callable,Tuple
+from typing import List, Dict, Union, Optional, Callable, Tuple, Any
 import numpy as np
 import torch
 from tqdm import tqdm
-from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_huggingface import HuggingFaceEmbeddings
 from langchain.docstore.document import Document
-
 
 class AgentHistoryManagerContentRetrieve:
     def __init__(
@@ -99,12 +98,7 @@ class AgentHistoryManagerContentRetrieve:
     ) -> List[Tuple[Document, float]]:
         return self.retrieve_relevant_content(query, documents, metadata)
 
-from typing import List, Dict, Union, Optional, Callable, Tuple, Any
-import numpy as np
-import torch
-from tqdm import tqdm
-from langchain_community.embeddings import HuggingFaceEmbeddings
-from langchain.docstore.document import Document
+
 
 
 class AgentHistoryManagerContentRetrieveUpdate:

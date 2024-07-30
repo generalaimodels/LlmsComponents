@@ -2,13 +2,13 @@ import os
 import json
 from typing import List, Tuple, Dict, Any
 from datetime import datetime
-from agentdataset import AgentDataset, AgentDatasetLoader
-from agentcontentretrieve import AgentContentRetrieval
-from agenthistorysession import AgentHistorySession
-from historyagentcontentretrieve import AgentHistoryManagerContentRetrieve
-from agentprompting import AgentPromptTemplate
+from LlmsComponents.LLM_Components.AgentPipeline.agentdatacollection.dataloaderandpreprocess import AgentDataset, AgentDatasetLoader
+from LlmsComponents.LLM_Components.AgentPipeline.agentdataretrieval.agentcontentretrieve import AgentContentRetrieval
+from LlmsComponents.LLM_Components.AgentPipeline.agenthistory.agenthistorysession import AgentHistorySession
+from LlmsComponents.LLM_Components.AgentPipeline.agenthistory.testinghistoryagentcontentretrieve import AgentHistoryManagerContentRetrieve
+from LlmsComponents.LLM_Components.AgentPipeline.agentprompttemplate.agentprompting import AgentPromptTemplate
 from langchain_huggingface import HuggingFaceEmbeddings
-from agentchattemplete import AgentChatTokenizer
+from LlmsComponents.LLM_Components.AgentPipeline.agentcallingpipline.agentchattemplete import AgentChatTokenizer
 
 
 class AgentInteractionManager:

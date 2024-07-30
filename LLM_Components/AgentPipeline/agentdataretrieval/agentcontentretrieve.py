@@ -2,10 +2,21 @@ import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity, euclidean_distances
 from tqdm import tqdm
 import joblib
+import logging
 from typing import List, Dict, Union, Optional, Any, Tuple
 from enum import Enum
 from langchain.docstore.document import Document
 from langchain_huggingface import HuggingFaceEmbeddings
+
+
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    filename='logs/agent_content_retrieve.log',
+    filemode='w'
+)
+logger = logging.getLogger(__name__)
+
 class DistanceStrategy(Enum):
     COSINE = "cosine"
     EUCLIDEAN = "euclidean"

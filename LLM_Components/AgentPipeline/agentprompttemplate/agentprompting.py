@@ -74,17 +74,3 @@ class AgentPromptTemplate:
         data = json.loads(json_str)
         return cls(**data)
 
-
-# Example usage
-if __name__ == "__main__":
-    template = AgentPromptTemplate(
-        role="AI Assistant",
-        content="Explain {topic} in simple terms.{depth}",
-        parameters={"topic": "quantum computing", "depth": "details explaination i want"},
-        example="Quantum computing is like a super-fast calculator that can solve complex problems.",
-        constraints=["Use simple language", "Avoid technical jargon"],
-        output_format="A brief paragraph explanation"
-    )
-
-    formatted_prompt = template.format()
-    print(json.dumps(formatted_prompt, indent=2))
