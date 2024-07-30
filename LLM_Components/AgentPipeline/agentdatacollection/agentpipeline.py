@@ -53,7 +53,9 @@ class AgentRAGPipeline:
                 str(self.directory_path),
                 glob=self.file_glob,
                 recursive=self.recursive,
-                exclude=self.exclude_patterns
+                exclude=self.exclude_patterns,
+                show_progress= True,
+                use_multithreading = True,
             )
             self.documents = loader.load()
             logger.info(f"Loaded {len(self.documents)} documents.")

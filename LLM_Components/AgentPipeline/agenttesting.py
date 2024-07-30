@@ -1,78 +1,187 @@
-import sys
-from pathlib import Path 
-import logging 
-from g4f.client import Client
-sys.path.append(str(Path(__file__).resolve().parents[0]))
+# import sys
+# from pathlib import Path
+# import logging
+# import json
+# import os
+# from typing import List, Dict, Any, Optional
 
-import json
-import os
-from typing import List, Dict, Any
-import argparse
+# from g4f.client import Client
+# from langchain_huggingface import HuggingFaceEmbeddings
+# from agentdatacollection import AgentRAGPipeline
+# from agenthistory import AgentHistoryManagerContentRetrieveUpdate
+
+# # Add parent directory to sys.path
+# sys.path.append(str(Path(__file__).resolve().parent))
+
+# # Configure logging
+# logging.basicConfig(
+#     level=logging.INFO,
+#     format='%(asctime)s - %(levelname)s - %(message)s',
+#     filename='logs/testing_agent.log',
+#     filemode='w'
+# )
+# logger = logging.getLogger(__name__)
+
+# # Constants
+# HISTORY_FILE = 'history.json'
+# MODEL_NAME = "sentence-transformers/all-mpnet-base-v2"
+# MODEL_KWARGS = {'device': 'cpu'}
+# ENCODE_KWARGS = {'normalize_embeddings': False}
+# OUTPUT_FOLDER = Path(r"C:\Users\heman\Desktop\components\LlmsComponents\Agents")
+
+
+# def load_history(file_path: str) -> List[Dict[str, Any]]:
+#     """Load the history from a JSON file."""
+#     try:
+#         with open(file_path, 'r') as file:
+#             return json.load(file)
+#     except FileNotFoundError:
+#         logger.info("History file not found. Creating a new one.")
+#         return []
+#     except json.JSONDecodeError:
+#         logger.error("Error decoding JSON from history file.")
+#         return []
+
+
+# def save_history(file_path: str, history: List[Dict[str, Any]]) -> None:
+#     """Save the history to a JSON file."""
+#     try:
+#         with open(file_path, 'w') as file:
+#             json.dump(history, file, indent=4)
+#         logger.info(f"History successfully saved to {file_path}.")
+#     except IOError:
+#         logger.error(f"Error saving history to {file_path}.")
+
+
+# def query_model(query: str, history: List[Dict[str, Any]]) -> str:
+#     """Query the model and update the history."""
+#     try:
+#         client = Client()
+#         prompt = f"write code in python for Query: {query} content: {history}"
+#         response = client.chat.completions.create(
+#             model="gpt-3.5-turbo",
+#             messages=[{"role": "user", "content": prompt}],
+#         )
+#         response_content = response.choices[0].message.content
+#         logger.info("Model response received successfully.")
+
+#         history_entry = {
+#             "query": query,
+#             "response": response_content
+#         }
+#         history.append(history_entry)
+
+#         return response_content
+
+#     except Exception as e:
+#         logger.error(f"An error occurred while querying the model: {e}")
+#         return "An error occurred while processing your query."
+
+
+# def create_embedding_model() -> HuggingFaceEmbeddings:
+#     """Create and return the embedding model."""
+#     return HuggingFaceEmbeddings(
+#         model_name=MODEL_NAME,
+#         model_kwargs=MODEL_KWARGS,
+#         encode_kwargs=ENCODE_KWARGS
+#     )
+
+
+# def interactive_session(
+#     embedding_model: HuggingFaceEmbeddings,
+#     agent_data_pipeline: AgentRAGPipeline,
+#     agent_history: AgentHistoryManagerContentRetrieveUpdate
+# ) -> None:
+#     """Start an interactive session for querying the model."""
+#     history = load_history(HISTORY_FILE)
+
+#     while True:
+#         try:
+#             query = input("Enter your query (or type 'exit' to quit): ").strip()
+#             if query.lower() in ['exit', 'quit']:
+#                 break
+            
+#             results = agent_data_pipeline.query(query=query, k=1)
+#             meta_data = [{"query": query}]
+#             result_session = agent_history.query(query, results, meta_data)
+#             results.extend(result_session[0][0].page_content)
+#             response = query_model(query, history=results)
+#             print(response)
+
+#         except KeyboardInterrupt:
+#             print("\nSession interrupted. Exiting.")
+#             break
+
+#     save_history(HISTORY_FILE, history)
+
+
+# def main() -> None:
+#     """Main function to set up and run the interactive session."""
+#     logger.info("Agent is starting...")
+    
+#     embedding_model = create_embedding_model()
+    
+#     agent_history = AgentHistoryManagerContentRetrieveUpdate(embedding_model)
+    
+#     agent_data_pipeline = AgentRAGPipeline(
+#         embedding_model=embedding_model,
+#         directory_path=OUTPUT_FOLDER,
+#         exclude_patterns=["*.pyc"],
+       
+
+#     )
+
+#     agent_data_pipeline.load_documents()
+#     agent_data_pipeline.split_documents()
+#     agent_data_pipeline.create_vectorstore()
+
+#     interactive_session(embedding_model, agent_data_pipeline, agent_history)
+
+#     logger.info("Agent session ended.")
+
+
+# if __name__ == "__main__":
+#     main()
+
+
+
+import sys
+from pathlib import Path
 import logging
-import readline
-from agentdatacollection import (
-    ConvertFolder_to_TxtFolder,
-    AgentDataset,
-    AgentDatasetLoader,
-    AgentRAGPipeline
-)
-from agentdataretrieval import AgentContentRetrieval
+import os
+import json
+from typing import List, Dict, Any
+from g4f.client import Client
+from agentdatacollection import AgentRAGPipeline
 from agenthistory import AgentHistoryManagerContentRetrieveUpdate
 from langchain_huggingface import HuggingFaceEmbeddings
-from agentcustommodel import (
-    AgentModel,
-    AgentPipeline,
-    AgentPreProcessorPipeline,
-    BitsAndBytesConfig,
-    set_seed,
-)
+
+# Setup logging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
-    filename='logs/testing_agent.log',
+    filename=r'C:\Users\heman\Desktop\components\logs\testing.log',
     filemode='w'
 )
 
 HISTORY_FILE = 'history.json'
 logger = logging.getLogger(__name__)
 
-
-
-
-# Model_Name=""
-# cache_dir=""
-# model=AgentModel.load_model(
-#     model_type="causal_lm",
-#     model_name_or_path=Model_Name,
-#     cache_dir=cache_dir,
-# )
-# tokeiner=AgentPreProcessorPipeline(model_type="text",
-#                                    pretrained_model_name_or_path=Model_Name,
-#                                    cache_dir=cache_dir
-#                                    ).process_data()
-model_name = "sentence-transformers/all-mpnet-base-v2" #@param {type:"string"} 
-model_kwargs = {'device': 'cpu'}  #@param {type:"string"}
-encode_kwargs = {'normalize_embeddings': False} #@param {type:"string"}
-embedding_model= HuggingFaceEmbeddings(
-    model_name=model_name,
-    model_kwargs=model_kwargs,
-    encode_kwargs=encode_kwargs
+# Model Configuration
+MODEL_NAME = "sentence-transformers/all-mpnet-base-v2"  # @param {type:"string"}
+MODEL_KWARGS = {'device': 'cpu'}  # @param {type:"string"}
+ENCODE_KWARGS = {'normalize_embeddings': False}  # @param {type:"string"}
+EMBEDDING_MODEL = HuggingFaceEmbeddings(
+    model_name=MODEL_NAME,
+    model_kwargs=MODEL_KWARGS,
+    encode_kwargs=ENCODE_KWARGS
 )
-logger.info(f"Agent is Started ...")
-input_folder :str =[r"E:\LLMS\Fine-tuning\LlmsComponents\LLM_Components\AgentPipeline"]
-output_folder :str =r"E:\LLMS\Fine-tuning\output"
 
-
-
-
-
-
-
-
+OUTPUT_FOLDER = r"C:\Users\heman\Desktop\components\cookbook\notebooks\en"
 
 
 def load_history(file_path: str) -> List[Dict[str, Any]]:
-    """Loads the history from a JSON file."""
+    """Load the history from a JSON file."""
     if not os.path.exists(file_path):
         logging.info("History file not found. Creating a new one.")
         return []
@@ -82,20 +191,20 @@ def load_history(file_path: str) -> List[Dict[str, Any]]:
 
 
 def save_history(file_path: str, history: List[Dict[str, Any]]) -> None:
-    """Saves the history to a JSON file."""
+    """Save the history to a JSON file."""
     with open(file_path, 'w') as file:
         json.dump(history, file, indent=4)
     logging.info(f"History successfully saved to {file_path}.")
 
 
 def query_model(query: str, history: List[Dict[str, Any]]) -> str:
-    """Queries the model and updates the history."""
+    """Query the model and update the history."""
     try:
         client = Client()
-        prompt = f"write code in python for Query: {query} content: {history}"
+        prompt = f"write code in python for Query: {query} \nContent: {history}"
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
-            messages=[{"role": "user", "content": prompt}],
+            messages=[{"role": "user", "content": prompt}]
         )
         response_content = response.choices[0].message.content
         logging.info("Model response received successfully.")
@@ -114,12 +223,12 @@ def query_model(query: str, history: List[Dict[str, Any]]) -> str:
 
 
 def interactive_session():
-    """Starts an interactive session for querying the model."""
+    """Start an interactive session for querying the model."""
     history = load_history(HISTORY_FILE)
-    Agent_history=AgentHistoryManagerContentRetrieveUpdate(embedding_model)
+    agent_history = AgentHistoryManagerContentRetrieveUpdate(EMBEDDING_MODEL)
     agent_data_pipeline = AgentRAGPipeline(
-        embedding_model=embedding_model,  # Replace with actual embedding model path
-        directory_path=output_folder  # Replace with actual directory path
+        embedding_model=EMBEDDING_MODEL,
+        directory_path=OUTPUT_FOLDER
     )
 
     agent_data_pipeline.load_documents()
@@ -131,12 +240,10 @@ def interactive_session():
             query = input("Enter your query (or type 'exit' to quit): ").strip()
             if query.lower() in ['exit', 'quit']:
                 break
-            
+
             results = agent_data_pipeline.query(query=query, k=1)
-            meta_data=[
-                {"query":query}
-            ]
-            result_session = Agent_history.query(query, results, meta_data)
+            meta_data = [{"query": query}]
+            result_session = agent_history.query(query, results, meta_data)
             results.extend(result_session[0][0].page_content)
             response = query_model(query, history=results)
             print(response)
@@ -150,11 +257,6 @@ def interactive_session():
 
 if __name__ == "__main__":
     interactive_session()
-
-
-
-
-
 
 
 
