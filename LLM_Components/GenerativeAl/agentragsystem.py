@@ -16,7 +16,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from transformers.agents import Tool, ReactCodeAgent, HfEngine
 import logging
 
-# Set up logging
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -92,6 +92,7 @@ def create_agent(engine: Engine, table_name: str, model_name: str) -> ReactCodeA
         tools=[sql_tool],
         llm_engine=HfEngine(model_name),
     )
+
 
 def main():
     # Create database and table
