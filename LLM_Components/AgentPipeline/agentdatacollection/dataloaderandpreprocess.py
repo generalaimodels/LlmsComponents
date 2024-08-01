@@ -10,7 +10,7 @@ from typing import Dict, List, Tuple, Any
 from langchain.docstore.document import Document
 from datasets import Dataset, DatasetDict, load_dataset
 
-
+from evaluate import load
 
 logging.basicConfig(
     level=logging.INFO,
