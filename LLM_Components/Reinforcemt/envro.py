@@ -10,6 +10,8 @@ from torch.distributions import Categorical
 from typing import List, Tuple, Dict, Any
 import numpy as np
 from tqdm import tqdm
+
+
 class AdvancedLLMEnvironment:
     def __init__(
         self,
@@ -359,7 +361,7 @@ if __name__ == "__main__":
     env = AdvancedLLMEnvironment("gpt2", "gpt2-medium")
     
     # Define state and action dimensions
-    state_dim = 5  # Adjust this based on your state representation
+    state_dim = 5   # Adjust this based on your state representation
     action_dim = 9  # Adjust this based on your action space
     
     # Initialize PPO
