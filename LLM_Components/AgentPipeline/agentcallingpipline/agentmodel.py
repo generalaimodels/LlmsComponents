@@ -1,20 +1,31 @@
 import os
 from typing import( 
-    Union, List, Dict, Optional, Callable, Tuple,Any
+Union,
+List, 
+Dict,
+Optional,
+Callable,
+Tuple,
+Any
 )
 import torch
-from torch.utils.data import Dataset, IterableDataset, DataLoader, Dataset
+from torch.utils.data import (
+Dataset,
+IterableDataset, 
+DataLoader, 
+Dataset
+)
 from transformers import (
-    PreTrainedModel,
-    Trainer,
-    TrainingArguments,
-    EvalPrediction,
-    pipeline,
-    TrainerCallback,
-    DataCollator,
-    BitsAndBytesConfig,
-    PretrainedConfig,
-    Pipeline
+PreTrainedModel,
+Trainer,
+TrainingArguments,
+EvalPrediction,
+pipeline,
+TrainerCallback,
+DataCollator,
+BitsAndBytesConfig,
+PretrainedConfig,
+Pipeline
 )
 from transformers.configuration_utils import PretrainedConfig
 from transformers.dynamic_module_utils import get_class_from_dynamic_module
@@ -57,8 +68,7 @@ class AgentKnowledgeLearning:
                        model_type=data_type,
                        pretrained_model_name_or_path=pretrained_model_name_or_path,
                        *self.model_args,
-                       **self.model_kwargs
-           
+                       **self.model_kwargs   
         ).process_data()
 
 
@@ -152,4 +162,4 @@ class AgentKnowledgeLearning:
                 model_kwargs=model_kwargs,
                 pipeline_class=pipeline_class,
                 **kwargs,
-        )
+        ) 
