@@ -1,123 +1,109 @@
-# Advanced Retrieval-Augmented Generation Application (RAG_APP)
+# Advanced RAG Application
 
-## Overview
+The Advanced RAG (Retrieval-Augmented Generation) Application is an interactive tool that leverages advanced document loading, splitting, embedding, and vector search capabilities to enable efficient text retrieval and response generation. It also supports speech-to-text and text-to-speech functionalities for enhanced interactivity.
 
-This application integrates various advanced components for document loading, splitting, embedding, and searching. It also includes functionality for speech-to-text and text-to-speech, providing a comprehensive solution for handling and querying large document collections. The code follows PEP-8 standards, employs robust and scalable design principles, and avoids hardcoding parameters.
+## Table of Contents
+
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+  - [Interactive Mode](#interactive-mode)
+  - [Batch Mode](#batch-mode)
+- [Components](#components)
+  - [AdvancedDirectoryLoader](#advanceddirectoryloader)
+  - [AdvancedDocumentSplitter](#advanceddocumentsplitter)
+  - [HuggingFaceEmbeddings](#huggingfaceembeddings)
+  - [AdvancedFAISS](#advancedfaiss)
+  - [ReadPipeline](#readpipeline)
+  - [SpeechToTextPipeline](#speechtotextpipeline)
+  - [TextToSpeechAPI](#texttospeechapi)
+- [History Management](#history-management)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## Features
 
-- **Document Loading**: Load documents from a specified directory using `AdvancedDirectoryLoader`.
-- **Document Splitting**: Split large documents into smaller chunks using `AdvancedDocumentSplitter`.
-- **Embedding and FAISS Index**: Create embeddings for documents and use FAISS for efficient similarity search.
-- **Text Generation**: Generate responses using the `ReadPipeline`.
-- **Speech-to-Text**: Transcribe audio files or live microphone input using `SpeechToTextPipeline`.
-- **Text-to-Speech**: Convert text to speech using `TextToSpeechAPI`.
+- **Document Loading and Splitting**: Efficiently load and split large documents into manageable chunks.
+- **Embedding and Vector Search**: Utilize advanced embedding techniques and FAISS for fast and accurate similarity and MMR searches.
+- **Text Generation**: Generate context-aware responses using a language model.
+- **Speech Recognition and Synthesis**: Convert spoken words to text and synthesize text into speech.
+- **History Management**: Save and load interaction histories for review and analysis.
 
 ## Installation
 
-Ensure you have Python 3.7 or higher installed. Then, install the required Python packages:
+1. **Clone the repository**:
+    ```bash
+    git clone llms-data , than pull Hemanth
+    cd chat_bot
+    ```
 
-```bash
-pip install transformers langchain_huggingface faiss-gpu
-# Add any other required packages here
-```
+2. **Install dependencies**:
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-You may also need to install FFmpeg for audio processing:
-
-```bash
-# For Ubuntu/Debian
-sudo apt update
-sudo apt install ffmpeg
-
-# For macOS using Homebrew
-brew install ffmpeg
-```
+3. **Install FAISS**:
+    ```bash
+    conda install -c pytorch faiss-cpu  # or faiss-gpu for GPU support
+    ```
 
 ## Usage
 
-1. **Clone the repository and navigate to the project directory:**
+The application can be run in two modes: **Interactive** and **Batch**.
+
+### Interactive Mode
+
+In interactive mode, the application allows for a back-and-forth interaction with the user. 
+
+To start the application in interactive mode:
 
 ```bash
-git clone <repository-url>
-cd <repository-directory>
+python app.py --data_dir <path_to_data_dir> --model_name <model_name> --mode interactive
 ```
 
-2. **Run the main application:**
+### Batch Mode
+
+Batch mode allows the processing of multiple queries from a file and saves the results to an output file.
+
+To run the application in batch mode:
 
 ```bash
-python app.py
+python app.py --data_dir <path_to_data_dir> --model_name <model_name> --mode batch --batch_file <path_to_batch_file> --output_file <path_to_output_file>
 ```
-
-3. **Parameters:**
-
-- `directory`: Path to the directory containing documents.
-- `tokenizer_model`: Name of the tokenizer model (e.g., `bert-base-uncased`).
-- `chunk_size`: Size of each document chunk.
-- `embedding_model`: Name of the embedding model (e.g., `sentence-transformers/all-MiniLM-L6-v2`).
-- `audio_file`: Path to the audio file for transcription testing.
-- `duration`: Duration for live microphone transcription in seconds.
-- `chunk_length_s`: Chunk length in seconds for streaming transcription.
 
 ## Components
 
-### Document Loading
+### AdvancedDirectoryLoader
 
-Load documents from a specified directory:
+Loads documents from a specified directory.
 
-```python
-loader = AdvancedDirectoryLoader(directory)
-documents = loader.load()
-```
+### AdvancedDocumentSplitter
 
-### Document Splitting
+Splits loaded documents into smaller chunks using a tokenizer.
 
-Split large documents into smaller chunks:
+### HuggingFaceEmbeddings
 
-```python
-splitter = AdvancedDocumentSplitter(tokenizer=tokenizer, chunk_size=chunk_size)
-split_documents = splitter.split_documents(documents)
-```
+Generates embeddings using a pre-trained Hugging Face model.
 
-### Embedding and FAISS Index
+### AdvancedFAISS
 
-Create embeddings for documents and use FAISS for efficient similarity search:
+Indexes and searches document embeddings using FAISS for similarity and MMR searches.
 
-```python
-embeddings_model = create_embedding_model(model_name)
-advanced_faiss = initialize_faiss_index(embeddings_model)
-add_documents_to_faiss(advanced_faiss, documents)
-results = search_with_faiss(advanced_faiss, query, k)
-```
+### ReadPipeline
 
-### Speech-to-Text
+Generates responses to queries based on the context provided.
 
-Transcribe audio files or live microphone input:
+### SpeechToTextPipeline
 
-```python
-pipeline = SpeechToTextPipeline(model_name)
-transcription = transcribe_audio(pipeline, audio_file)
-mic_transcription = transcribe_microphone(pipeline, duration)
-stream_transcriptions = stream_transcription(pipeline, duration, chunk_length_s)
-```
+Transcribes speech from audio files or microphone input.
 
-### Text-to-Speech
+### TextToSpeechAPI
 
-Convert text to speech and save to file:
+Converts text to speech and plays it back to the user or saves it to a file.
 
-```python
-tts = TextToSpeechAPI()
-tts.speak("Hello, this is a test of the text-to-speech API.")
-tts.save_to_file("This text will be saved to a file.", "output.mp3", rate=180)
-```
+## History Management
 
-## Notes
-
-- Replace `'path/to/audio/file'` with the actual path to your audio file for testing the transcription functionality.
-- Customize parameters as needed for your specific use case.
-
-## License
-
-This project is licensed under the MIT License.
+The application keeps a history of interactions. You can view, clear, save, or load the interaction history.
 
 
 
