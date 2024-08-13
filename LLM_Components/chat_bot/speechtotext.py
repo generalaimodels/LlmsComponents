@@ -178,20 +178,3 @@ def test_streaming_transcription(pipeline, duration=30, chunk_length_s=5):
 
     print()
 
-# def main():
-#     # Initialize the pipeline
-#     model_name = "openai/whisper-small"
-#     pipeline = SpeechToTextPipeline(model_name)
-
-#     # Test file transcription
-#     audio_file = "path/to/your/audio/file.wav"  # Replace with your audio file path
-#     test_file_transcription(pipeline, audio_file)
-
-#     # Test microphone transcription
-#     test_microphone_transcription(pipeline)
-
-#     # Test streaming transcription
-#     test_streaming_transcription(pipeline)
-
-# if __name__ == "__main__":
-#     main()

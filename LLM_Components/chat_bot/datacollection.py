@@ -116,12 +116,3 @@ class AdvancedDirectoryLoader:
 
 
 
-
-# # Example usage
-# if __name__ == "__main__":
-#     loader = AdvancedDirectoryLoader("C:/Users/heman/Desktop/Coding/LlmsComponents/LLM_Components/AgentPipeline/agentcallingpipline/")
-#     documents = loader.load()
-#     for doc in documents:
-#         print(f"Document: {doc.page_content[:50]}...")
-#         print(f"Metadata: {doc.metadata}")
-#         print("---")
