@@ -45,7 +45,7 @@ cd <repository-directory>
 2. **Run the main application:**
 
 ```bash
-python main.py
+python app.py
 ```
 
 3. **Parameters:**

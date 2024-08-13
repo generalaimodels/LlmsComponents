@@ -339,16 +339,3 @@ def test_ffmpeg_microphone_live():
         print(f"Error in ffmpeg_microphone_live: {str(e)}")
     print()
 
-# def main():
-#     # # Test ffmpeg_read
-#     # audio_file_path = "path/to/your/audio/file.wav"  # Replace with your audio file path
-#     # test_ffmpeg_read(audio_file_path)
-
-#     # Test ffmpeg_microphone
-#     test_ffmpeg_microphone()
-
-#     # Test ffmpeg_microphone_live
-#     test_ffmpeg_microphone_live()
-
-# if __name__ == "__main__":
-#     main()
