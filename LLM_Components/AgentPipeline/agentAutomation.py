@@ -3,7 +3,7 @@ from pathlib import Path
 import logging
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from functools import partial
-
+from g4f.client import Client
 from langchain_huggingface import HuggingFaceEmbeddings
 from agentdatacollection import (
     ConvertFolder_to_TxtFolder,
@@ -12,7 +12,8 @@ from agentdatacollection import (
     AgentRAGPipeline
 )
 from agentdataretrieval import AgentContentRetrieval
-
+import os
+import shutil
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -24,7 +25,7 @@ class AdvancedAgentAutomationPipeline:
         model_name: str = "sentence-transformers/all-mpnet-base-v2",
         model_kwargs: Dict[str, Any] = {'device': 'cpu'},
         encode_kwargs: Dict[str, Any] = {'normalize_embeddings': False},
-        chunk_size: int = 512,
+        chunk_size: int = 150,
         chunk_overlap: int = 50,
         max_workers: int = 4
     ):
@@ -140,7 +141,6 @@ class AdvancedAgentAutomationPipeline:
         return self.process_query_batch(queries, method, top_k)
 
 def main():
-    # Example usage
     pipeline = AdvancedAgentAutomationPipeline(
         input_folders=[r"E:\LLMS\Fine-tuning\LlmsComponents\LLM_Components\AgentPipeline\agentcallingpipline"],
         output_folder="./output",
@@ -152,20 +152,40 @@ def main():
         "from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig, pipeline",
         "from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig, pipeline"
     ]
-
+    client = Client()
+    
+    result_all=[]
     # Run pipeline with retrieve method
     retrieve_results = pipeline.run_pipeline(queries, method='retrieve', top_k=1)
     for result in retrieve_results:
-        print(f"Query: {result['query']}")
-        print(f"Results: {result['result']}")
-        print("---")
-
+        # print(f"Query: {result['query']}")
+        # print(f"Results: {result['result']}")
+        # print("---")
+        result_all.append(result['query'])
+        result_all.append(result['result'])
+        prompt = f" Query content: {result_all} explain details after properly understanding"
+        response = client.chat.completions.create(
+                model="gpt-3.5-turbo",
+                messages=[{"role": "user", "content": prompt}],
+            )
+        
+        print(f" Case 1 method= retrieve Response from the Agent Based on Query , Content :\n \n {response.choices[0].message.content}")
     # Run pipeline with rag_query method
+    result_all_1=[]
     rag_results = pipeline.run_pipeline(queries, method='rag_query')
     for result in rag_results:
-        print(f"Query: {result['query']}")
-        print(result['result'])
+        # print(f"Query: {result['query']}")
+        # print(result['result'])
+        result_all_1.append(result['query'])
+        result_all_1.append(result['result'])
+        prompt = f"  content: {result_all_1} explain details after properly understanding"
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[{"role": "user", "content": prompt}],
+        )
+    
+        print(f" case 2 method =rag_query Response from the Agent Based on Query , Content :\n \n {response.choices[0].message.content}")
 
-
+    shutil.rmtree(path="E:/LLMS/Fine-tuning/llms-data/output")
 if __name__ == "__main__":
     main()
