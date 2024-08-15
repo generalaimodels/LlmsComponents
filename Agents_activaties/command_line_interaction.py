@@ -97,7 +97,7 @@ class AdvancedCLI:
         while True:
             user_input = input(f"{Fore.YELLOW}\nEnter your query: ").strip().lower()
 
-            if user_input == 'quit':
+            if user_input in['quit',"q","exit","bye","good bye","close","Good Bye"]:
                 break
             elif user_input == 'history':
                 self.print_history()
