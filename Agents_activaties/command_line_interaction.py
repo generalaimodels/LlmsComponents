@@ -105,7 +105,7 @@ class AdvancedCLI:
                 self.clear_history()
             else:
                 response = await self.ask_query(user_input)
-                print(f"{Fore.GREEN}Response: {response}")
+                print(f"{Fore.GREEN} Response: {response}")
 
                 self.history.append({
                     "query": user_input,
@@ -113,7 +113,7 @@ class AdvancedCLI:
                 })
                 await self.save_history()
 
-        print(f"{Fore.MAGENTA}Thank you for using the Advanced CLI. Goodbye!")
+        print(f"{Fore.MAGENTA} Thank you for using the Advanced CLI. Goodbye!")
 
 async def main() -> None:
     cli = AdvancedCLI(

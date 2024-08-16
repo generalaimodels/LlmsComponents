@@ -159,7 +159,7 @@ def create_gradio_interface() -> gr.Blocks:
         }
     """) as demo:
         
-        gr.Markdown("<div id='interface-title'>🧠 Great work need time </div>")
+        gr.Markdown("<div id='interface-title'> 🧠 Great work need time </div>")
 
         chatbot = gr.Chatbot(elem_id="chatbot")
         query_input = gr.Textbox(
