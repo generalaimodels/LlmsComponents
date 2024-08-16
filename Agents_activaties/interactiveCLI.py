@@ -3,9 +3,13 @@ import json
 from typing import List, Dict, Union
 import g4f
 import colorama
-
+import sys
 # Initialize colorama for cross-platform colored output
 colorama.init(autoreset=True)
+
+# Set appropriate event loop policy for Windows
+if sys.platform.startswith('win'):
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
 class AdvancedCLI:
     def __init__(self):

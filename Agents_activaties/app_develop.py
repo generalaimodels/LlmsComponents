@@ -101,8 +101,8 @@ def create_gradio_interface() -> gr.Blocks:
         return "", message
 
     async def add_text(
-        history: List[Tuple[str, str]], text: str
-    ) -> Tuple[List[Tuple[str, str]], str]:
+        history, text
+    ) :
         if not text.strip():
             return history, ""  # Ignore empty submissions
         response, _ = await handle_query(text)

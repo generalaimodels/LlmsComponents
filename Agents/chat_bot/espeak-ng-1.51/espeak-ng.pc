@@ -1,0 +1,11 @@
+prefix=/home/hemanth/local
+exec_prefix=/home/hemanth/local
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: eSpeak NG
+Description: eSpeak NG is a multi-lingual software speech synthesizer
+Version: 1.51
+Requires:
+Libs: -L${libdir} -lespeak-ng
+Cflags: -I${includedir}
