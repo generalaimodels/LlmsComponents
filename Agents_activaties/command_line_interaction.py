@@ -9,7 +9,6 @@ import sys
 # Initialize colorama for cross-platform colored output
 init(autoreset=True)
 
-# Set appropriate event loop policy for Windows
 if sys.platform.startswith('win'):
     asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
