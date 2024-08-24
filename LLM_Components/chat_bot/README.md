@@ -1,7 +1,7 @@
 # Advanced RAG Application
 
 The Advanced RAG (Retrieval-Augmented Generation) Application is an interactive tool that leverages advanced document loading, splitting, embedding, and vector search capabilities to enable efficient text retrieval and response generation. It also supports speech-to-text and text-to-speech functionalities for enhanced interactivity.
-
+![chat_Flow](./assert/Chat_bot_flow.png)
 ## Table of Contents
 
 - [Features](#features)
