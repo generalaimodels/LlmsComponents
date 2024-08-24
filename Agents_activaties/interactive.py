@@ -21,7 +21,7 @@ async def ask_query(query: Query) -> Response:
     """
     response = await asyncio.to_thread(
         g4f.ChatCompletion.create,
-        model="gpt-3.5-turbo",
+        model="gpt-4o-mini",
         messages=[{"role": "user", "content": query}],
     )
     return response# Adjust based on actual response structure

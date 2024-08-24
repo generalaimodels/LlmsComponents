@@ -18,13 +18,13 @@ from langchain_community.vectorstores.utils import DistanceStrategy
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
-    filename=Path('E:/LLMS/Fine-tuning/logs/testing.log'),
-    filemode='w'
+    # filename=Path('E:/LLMS/Fine-tuning/logs/testing.log'),
+    # filemode='w'
 )
 logger = logging.getLogger(__name__)
 
-HISTORY_FILE = Path('E:/LLMS/Fine-tuning/llms-data/history.json')
-OUTPUT_FOLDER = Path("E:/LLMS/Fine-tuning/AGI_papers/Doc") 
+HISTORY_FILE = Path('C:/Users/heman/Desktop/Coding/LlmsComponents/LLM_Components/AgentPipeline/agentcustommodel/history.json')
+OUTPUT_FOLDER = Path("C:/Users/heman/Desktop/Coding/LlmsComponents/LLM_Components/AgentPipeline/agentcustommodel") 
 
 MODEL_NAME = "sentence-transformers/all-mpnet-base-v2"
 MODEL_KWARGS = {'device': 'cpu'}
@@ -146,7 +146,7 @@ def query_model(query: str, context: str) -> Optional[str]:
         client = Client()
         prompt = f"Query: {query} {context} given response in great details novelity and think about query and generates properly regarding query"
         response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
+            model="gpt-4o-mini",
             messages=[{"role": "user", "content": prompt}]
         )
         return response.choices[0].message.content

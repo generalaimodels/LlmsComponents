@@ -16,7 +16,7 @@ class AdvancedGradioInterface:
 
     async def ask_query(self, query: str) -> str:
         try:
-            messages = [{"role": "system", "content": "You are a helpful assistant."}]
+            messages = [{"role": "system", "content": "You are a helpful  Dynamic Adversarial Robustness Analysis Framework for AI assistant. developed by cdacb"}]
             for entry in self.history:
                 messages.append({"role": "user", "content": entry["query"]})
                 messages.append({"role": "assistant", "content": entry["response"]})
@@ -26,6 +26,7 @@ class AdvancedGradioInterface:
                 ChatCompletion.create,
                 model=self.model,
                 messages=messages,
+                
             )
             return response
         except Exception as e:
@@ -83,7 +84,7 @@ def create_gradio_interface() -> gr.Interface:
         return "", message
 
     with gr.Blocks(css="#chatbot {height: 350px; overflow: auto;}") as demo:
-        gr.Markdown("# Advanced GPT Interface")
+        gr.Markdown("#  🤖  🤖 Dynamic Adversarial Robustness Analysis Framework for AI 🤖  🤖 ")
         
         chatbot = gr.Chatbot(elem_id="chatbot")
         query_input = gr.Textbox(label="Enter your query", placeholder="Type your message here...")
