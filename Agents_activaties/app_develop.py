@@ -13,7 +13,7 @@ if sys.platform.startswith("win"):
 class AdvancedGradioInterface:
     """A class to manage a conversational AI interface with a history feature."""
 
-    def __init__(self, model: str = "gpt-3.5-turbo", history_file: str = "conversation_history.json"):
+    def __init__(self, model: str = "gpt-4o-mini", history_file: str = "conversation_history.json"):
         self.history: List[Dict[str, str]] = []
         self.model = model
         self.history_file = history_file
