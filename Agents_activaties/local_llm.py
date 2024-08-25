@@ -6,7 +6,7 @@ import gradio as gr
 import html
 
 # Constants
-DEFAULT_MODEL = "llama3"
+DEFAULT_MODEL = "llama3.1"
 DEFAULT_URL = "http://localhost:11434/api/chat"
 DEFAULT_SEED = 123
 DEFAULT_TEMPERATURE = 0.0
@@ -129,4 +129,4 @@ with gr.Blocks(css=css) as demo:
     )
 
 if __name__ == "__main__":
-    demo.launch(share=True)
+    demo.launch(share=True,server_port=8080)

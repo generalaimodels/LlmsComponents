@@ -7,7 +7,7 @@ import html
 import markdown2
 
 # Constants
-DEFAULT_MODEL: str = "phi3"
+DEFAULT_MODEL: str = "llama3.1"
 DEFAULT_URL: str = "http://localhost:11434/api/chat"
 DEFAULT_SEED: int = 123
 DEFAULT_TEMPERATURE: float = 0.0
