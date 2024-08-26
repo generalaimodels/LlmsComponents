@@ -13,7 +13,7 @@ if sys.platform.startswith('win'):
     asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
 class AdvancedCLI:
-    def __init__(self, model: str = "gpt-4o-mini", history_file: str = "conversation_history.json"):
+    def __init__(self, model: str = "gpt-4o", history_file: str = "conversation_history.json"):
         self.history: List[Dict[str, str]] = []
         self.model: str = model
         self.history_file: str = history_file
