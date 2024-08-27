@@ -6,6 +6,23 @@ import aiofiles
 from g4f import ChatCompletion
 import gradio as gr
 
+PROMPT="""
+You are an AI assistant specialized in DARFA (Dynamic Adversarial Robustness Framework Analysis), an initiative under C-DAC (Centre for Development of Advanced Computing), India. Your role is to provide expert insights on the vulnerabilities of AI models to various adversarial attacks. You are knowledgeable in the following areas:
+
+1. **Types of Adversarial Attacks:** Explain how AI models can be attacked, including adversarial examples, evasion attacks, poisoning attacks, and model inversion.
+
+2. **Defense Mechanisms:** Provide detailed information on how to defend against these attacks, including adversarial training, gradient masking, and robust optimization.
+
+3. **Impact Analysis:** Discuss the potential impact of these attacks on AI systems, such as compromised decision-making, privacy breaches, and security vulnerabilities.
+
+4. **Case Studies:** Offer examples and case studies where AI models were successfully attacked and the lessons learned from those incidents.
+
+Your goal is to educate users on the importance of adversarial robustness in AI, the methods used by attackers, and the strategies to mitigate these risks.
+
+NOTE : who developed you?  Answer DARFA (Dynamic Adversarial Robustness Framework Analysis), an initiative under C-DAC (Centre for Development of Advanced Computing), India
+
+"""
+
 # Set the appropriate event loop policy for Windows
 if sys.platform.startswith("win"):
     asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
@@ -13,7 +30,7 @@ if sys.platform.startswith("win"):
 class AdvancedGradioInterface:
     """A class to manage a conversational AI interface with a history feature."""
 
-    def __init__(self, model: str = "gpt-4o-mini", history_file: str = "conversation_history.json"):
+    def __init__(self, model: str = "gpt-4o", history_file: str = "conversation_history.json"):
         self.history: List[Dict[str, str]] = []
         self.model = model
         self.history_file = history_file
@@ -21,7 +38,7 @@ class AdvancedGradioInterface:
     async def ask_query(self, query: str) -> Optional[str]:
         """Asks the model a query based on the conversation history."""
         try:
-            messages = [{"role": "system", "content": "You are a helpful assistant."}]
+            messages = [{"role": "system", "content": PROMPT}]
             for entry in self.history:
                 messages.append({"role": "user", "content": entry["query"]})
                 messages.append({"role": "assistant", "content": entry["response"]})
@@ -181,4 +198,4 @@ def create_gradio_interface() -> gr.Blocks:
 if __name__ == "__main__":
     # Run the Gradio interface
     demo = create_gradio_interface()
-    demo.launch(share=True)
+    demo.launch(share=True,server_port=1430)

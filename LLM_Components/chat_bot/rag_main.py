@@ -14,6 +14,7 @@ from datacollection import AdvancedDirectoryLoader
 from document_splitter import AdvancedDocumentSplitter
 from embedding_data import AdvancedFAISS
 from g4f.client import Client
+import gradio as gr
 
 # Set the appropriate event loop policy for Windows
 if sys.platform.startswith("win"):
@@ -163,9 +164,92 @@ def main(user_query: str, config: Dict[str, Any]) -> None:
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
 
+def query_processor(user_query: str, config: Dict[str, Any]) -> str:
+    """
+    Process the user query and return the response.
+    """
+    try:
+        start_time = time.time()
+
+        # Build the vector database
+        vector_db = build_vector_database(
+            config["DATA_DIR"], config["EMBEDDING_MODEL_NAME"], config["CHUNK_SIZE"], config["K"]
+        )
+
+        if vector_db:
+            # Perform similarity search
+            retrieved_docs = vector_db.similarity_search(user_query, k=config["K"])
+
+            if retrieved_docs:
+                # Format the prompt
+                final_prompt = format_prompt(retrieved_docs, user_query)
+
+                # Get LLM response
+                response = client.chat.completions.create(
+                    model=config["LLM_MODEL"],
+                    messages=[{"role": "user", "content": final_prompt}],
+                )
+                answer = response.choices[0].message.content
+
+                # Rethinker - Optional step for refining the answer
+                rethinker = f"Answer to this best of your ability: {answer}"
+                response = client.chat.completions.create(
+                    model=config["LLM_MODEL"],
+                    messages=[{"role": "user", "content": rethinker}],
+                )
+                refined_answer = response.choices[0].message.content
+
+                end_time = time.time()
+                execution_time = end_time - start_time
+
+                return f"Initial Answer:\n\n{answer}\n\nRefined Answer:\n\n{refined_answer}\n\nExecution time: {execution_time:.2f} seconds"
+            else:
+                return "No documents retrieved for the query."
+        else:
+            return "Failed to build vector database."
+
+    except Exception as e:
+        return f"An unexpected error occurred: {str(e)}"
+
+# Gradio Interface
+def gradio_interface(query: str) -> str:
+    return query_processor(query, CONFIG)
+
+iface = gr.Interface(
+    fn=gradio_interface,
+    inputs=gr.Textbox(lines=2, placeholder="Enter your query here..."),
+    outputs="text",
+    title="Advanced Document Q&A System",
+    description="This system uses a vector database to retrieve relevant information and generate answers to your questions.",
+    theme="huggingface",
+    css="""
+    .gradio-container { 
+        background-color: #f0f0f0;
+        font-family: 'Arial', sans-serif;
+    }
+    .input-box { 
+        border: 2px solid #007bff;
+        border-radius: 5px;
+    }
+    .output-box {
+        background-color: #e6f3ff;
+        padding: 10px;
+        border-radius: 5px;
+    }
+    """,
+    article="""
+    ## How to use
+    1. Enter your question in the input box.
+    2. Click 'Submit' or press Enter.
+    3. Wait for the system to process your query and generate an answer.
+    4. The initial and refined answers will appear in the output box below, along with the execution time.
+
+    ## About
+    This system uses advanced natural language processing techniques to understand your query, 
+    retrieve relevant information from a document database, and generate comprehensive answers.
+    It also includes a refinement step to improve the quality of the response.
+    """
+)
 
 if __name__ == "__main__":
-    user_query = """
-    Write a document loading pipeline in Python. Write in great detail.
-    """
-    main(user_query, CONFIG)
+    iface.launch(share=True)
