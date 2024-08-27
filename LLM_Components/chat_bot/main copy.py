@@ -13,9 +13,7 @@ from document_splitter import AdvancedDocumentSplitter
 from embedding_data import AdvancedFAISS
 import sys
 from concurrent.futures import ThreadPoolExecutor
-
 from g4f.client import Client
-
 client = Client()
 
 # Set the appropriate event loop policy for Windows
@@ -105,23 +103,7 @@ if __name__ == "__main__":
     EMBEDDING_MODEL_NAME = "thenlper/gte-small"
     DATA_DIR = r"C:\Users\heman\Desktop\Coding\LlmsComponents\LLM_Components\AgentPipeline"
     USER_QUERY = """
-    write python code using above content below query
-
-    Function to load a transformers model.
-
-        Args:
-            model_type (str): The type of the model (e.g., 'causal_lm', 'masked_lm').
-            model_name_or_path (Union[str, Path]): The name or path of the model.
-            *model_args: Additional positional arguments to pass to the model's from_pretrained method.
-            **kwargs: Additional keyword arguments to pass to the model's from_pretrained method.
-
-        Returns:
-            model (Type): The loaded model.
-
-        Raises:
-            ValueError: If the specified model type is unknown.
-            ModelLoadingError: If an error occurs during model loading.
-
+    
     """
 
     # Build and query the vector database
