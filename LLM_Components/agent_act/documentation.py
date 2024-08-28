@@ -5,6 +5,12 @@ from pathlib import Path
 import os
 import markdown
 from g4f.client import Client
+# Setting the event loop policy for Windows platforms if necessary
+import sys
+if sys.platform.startswith('win'):
+    import asyncio
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+
 
 def get_module_info(module_name: str, object_name: str, function_name: str) -> Dict[str, Dict[str, Any]]:
     """
@@ -72,7 +78,7 @@ def generate_documentation(module_info: Dict[str, Dict[str, Any]], output_dir: P
         md_content += f"## Code\n```python\n{module_info[item_type]['code']}\n```\n\n"
         md_content += f"## Docstring\n{module_info[item_type]['docstring']}\n\n"
 
-        with open(output_dir / f"{item_type}_documentation.md", "w") as f:
+        with open(output_dir / f"{item_type}_documentation.md", "w", encoding="UTF-8") as f:
             f.write(md_content)
 
     # Generate enhanced docstrings
@@ -80,7 +86,7 @@ def generate_documentation(module_info: Dict[str, Dict[str, Any]], output_dir: P
     for item_type in ["object", "function"]:
         prompt = f"Enhance the following docstring for a Python {item_type}:\n\n{module_info[item_type]['docstring']}\n\nProvide a more detailed explanation, include argument descriptions, and add usage examples."
         response = client.chat.completions.create(
-            model="gpt-4-turbo",
+            model="gpt-4o",
             messages=[{"role": "user", "content": prompt}],
         )
         enhanced_docstring = response.choices[0].message.content

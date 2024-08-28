@@ -6,6 +6,11 @@ import sys
 from typing import Dict, Any, Tuple, Optional, List
 
 from g4f.client import Client
+# Setting the event loop policy for Windows platforms if necessary
+import sys
+if sys.platform.startswith('win'):
+    import asyncio
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
 def extract_code(content: str) -> str:
     """

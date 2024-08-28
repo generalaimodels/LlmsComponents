@@ -143,8 +143,8 @@ def interactive_loop():
         if prompt.lower() == 'quit':
             break
 
-        timeout = input("Enter execution timeout in seconds (press Enter for default): ")
-        timeout = int(timeout) if timeout.isdigit() else None
+        
+        timeout = 120
 
         result = system.generate_and_execute_code(prompt, timeout)
         

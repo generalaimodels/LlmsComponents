@@ -178,7 +178,7 @@ def create_gradio_interface() -> gr.Blocks:
         
         gr.Markdown("<div id='interface-title'> 🧠 Great work need time </div>")
 
-        chatbot = gr.Chatbot(elem_id="chatbot")
+        chatbot = gr.Chatbot(elem_id="DARFA")
         query_input = gr.Textbox(
             label="Enter your query",
             placeholder="Type your message here...",
@@ -196,6 +196,5 @@ def create_gradio_interface() -> gr.Blocks:
     return demo
 
 if __name__ == "__main__":
-    # Run the Gradio interface
     demo = create_gradio_interface()
     demo.launch(share=True,server_port=1430)
