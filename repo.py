@@ -41,7 +41,7 @@ def get_repos_from_org(org_name, token):
 
     return repo_details
 
-def write_to_markdown(repos, filename='Facebook.md'):
+def write_to_markdown(repos, filename='huggingface.md'):
     with open(filename, 'w', encoding="UTF-8") as f:
         f.write("# Repository Details\n\n")
         for repo in repos:
@@ -59,8 +59,8 @@ def write_to_markdown(repos, filename='Facebook.md'):
 
 
 # Example Usage
-GITHUB_TOKEN = 'XXXXX'  # Replace with your GitHub personal access token
-organization_name = 'facebookresearch'
+GITHUB_TOKEN = 'XXXXXX'  # Replace with your GitHub personal access token
+organization_name = 'huggingface'
 repos = get_repos_from_org(organization_name, GITHUB_TOKEN)
 
 write_to_markdown(repos)
