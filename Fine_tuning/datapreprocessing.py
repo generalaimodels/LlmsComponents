@@ -6,7 +6,7 @@ from transformers import PreTrainedTokenizer
 
 
 from data_loader import DatasetLoader
-from finetuningconfig import DataConfig
+from finetuningconfig import DataConfig,DatasetConfig
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -24,18 +24,20 @@ class PromptTemplate:
 class DatasetProcessor:
     def __init__(
         self,
-        config:  DataConfig,
+        dataloader_config:  DataConfig,
+        dataset_config: DatasetConfig,
         tokenizer: PreTrainedTokenizer,
         prompt_template: PromptTemplate,
     ):
-        self.config = config
+        self.config = dataset_config
+        self.datasetloader_config=dataloader_config
         self.tokenizer = tokenizer
         self.prompt_template = prompt_template
         
 
     def load_and_split_dataset(self) -> DatasetDict:
         try:
-            dataset = DatasetLoader(config=self.config).load()
+            dataset = DatasetLoader(config=self.datasetloader_config).load()
             return dataset.train_test_split(
                 test_size=self.config.eval_ratio + self.config.test_ratio,
                 shuffle=True,

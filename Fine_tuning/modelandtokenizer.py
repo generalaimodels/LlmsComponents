@@ -62,17 +62,3 @@ class ModelLoader:
             logger.error("Failed to load model configuration: %s", e)
             raise ValueError("Could not load model configuration.") from e
 
-# # Example usage
-# if __name__ == '__main__':
-#     try:
-#         # Create a model config instance
-#         model_config = ModelConfig('gpt2')
-#         # Initialize the ModelLoader with the model config
-#         model_loader = ModelLoader(model_config)
-
-#         # Load the model and tokenizer
-#         model, tokenizer = model_loader.load_model_and_tokenizer()
-#         config=model_loader.get_config()
-
-#     except ValueError as e:
-#         logger.critical("An error occurred: %s", e)

@@ -44,7 +44,7 @@ class CodeGenerationSystem:
             timeout = self.default_timeout
 
         try:
-            with open('temp_script.py', 'w') as file:
+            with open('temp_script.py', 'w',encoding="UTF-8") as file:
                 file.write(code)
 
             result = subprocess.run(

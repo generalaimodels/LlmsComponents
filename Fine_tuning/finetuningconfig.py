@@ -6,7 +6,7 @@ from datasets.download.download_manager import DownloadMode
 from datasets.download.download_config import DownloadConfig
 from datasets.utils.info_utils import VerificationMode
 from datasets.utils.version import Version
-
+from dataclasses import dataclass
 from typing import Optional
 
 
@@ -78,3 +78,13 @@ class ModelConfig:
 
 
 
+@dataclass
+class DatasetConfig:
+    split: str
+    train_ratio: float = 0.8
+    eval_ratio: float = 0.1
+    test_ratio: float = 0.1
+    input_columns: List[str] = None
+    target_column: str = None
+    max_length: int = 512
+    batch_size: int = 32
