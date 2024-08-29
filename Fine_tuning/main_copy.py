@@ -1,13 +1,5 @@
-import os
-import yaml
-import torch
-
-from typing import Dict, Any, Tuple
-from dataclasses import dataclass
-from tqdm import tqdm
-from transformers import Trainer, TrainingArguments, EvalPrediction
-from datasets import Dataset
-from huggingface_hub import HfApi
+#!/usr/bin/env python
+# coding=utf-8
 from finetuningconfig import DataConfig, ModelConfig,DatasetConfig
 from datapreprocessing import PromptTemplate, DatasetProcessor
 from data_collector import ConcatDataset_batch
