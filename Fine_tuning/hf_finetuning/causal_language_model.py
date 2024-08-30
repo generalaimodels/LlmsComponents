@@ -20,7 +20,7 @@ import transformers
 from transformers.utils import send_example_telemetry, logging as hf_logging
 from transformers.trainer_utils import get_last_checkpoint
 from transformers.testing_utils import CaptureLogger
-from finetuningconfig import DataTrainingArguments, ModelArguments
+from hfconfig import DataTrainingArguments, ModelArguments
 
 # Setup logging
 logging.basicConfig(
