@@ -9,10 +9,10 @@ from transformers import Trainer, TrainingArguments, EvalPrediction
 from datasets import Dataset
 from huggingface_hub import HfApi
 
-from LlmsComponents.Fine_tuning.customfinetuning.cconfig.finetuningconfig import DataConfig, ModelConfig
-from LlmsComponents.Fine_tuning.customfinetuning.cdata.datapreprocessing import PromptTemplate, DatasetProcessor
-from LlmsComponents.Fine_tuning.customfinetuning.cdata.data_collector import ConcatDataset_batch
-from LlmsComponents.Fine_tuning.customfinetuning.cmodel.modelandtokenizer import ModelLoader
+from customfinetuning.cconfig.finetuningconfig import DataConfig, ModelConfig
+from customfinetuning.cdata import PromptTemplate, DatasetProcessor
+from customfinetuning.cdata.data_collector import ConcatDataset_batch
+from customfinetuning.cmodel.modelandtokenizer import ModelLoader
 
 
 @dataclass

@@ -1,39 +1,41 @@
 import logging
 import copy
-from typing import Dict, List
+from typing import Dict, List, Any
 from datasets import Dataset, DatasetDict
 from transformers import PreTrainedTokenizer
 
-
 from .data_loader import DatasetLoader
-from customfinetuning.cconfig import DataConfig,DatasetConfig
+from customfinetuning.cconfig import DataConfig, DatasetConfig
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-
-
 class PromptTemplate:
-    def __init__(self, template: str, input_variables: List[str]):
+    def __init__(self, template: str, input_variables: List[str]) -> None:
         self.template = template
         self.input_variables = input_variables
 
-    def format(self, **kwargs) -> str:
+    def format(self, **kwargs: Any) -> str:
         return self.template.format(**{k: kwargs.get(k, '') for k in self.input_variables})
 
-class DatasetProcessor:
+class DatasetProcessorTest:
     def __init__(
         self,
-        dataloader_config:  DataConfig,
+        dataloader_config: DataConfig,
         dataset_config: DatasetConfig,
         tokenizer: PreTrainedTokenizer,
         prompt_template: PromptTemplate,
-    ):
+    ) -> None:
         self.config = dataset_config
-        self.datasetloader_config=dataloader_config
+        self.datasetloader_config = dataloader_config
         self.tokenizer = tokenizer
         self.prompt_template = prompt_template
-        
+
+        # Ensure the tokenizer knows about the special token
+        self.special_token_for_none = "[NONE]"
+        if self.special_token_for_none not in self.tokenizer.get_vocab():
+            self.tokenizer.add_tokens([self.special_token_for_none])
+            logger.info(f"Added special token for none: {self.special_token_for_none}")
 
     def load_and_split_dataset(self) -> DatasetDict:
         try:
@@ -47,7 +49,7 @@ class DatasetProcessor:
             logger.error(f"Error loading dataset: {e}")
             raise
 
-    def validate_columns(self, dataset: Dataset):
+    def validate_columns(self, dataset: Dataset) -> None:
         all_columns = self.config.input_columns + [self.config.target_column]
         missing_columns = [col for col in all_columns if col not in dataset.column_names]
         if missing_columns:
@@ -67,7 +69,15 @@ class DatasetProcessor:
         attention_masks = []
         labels = []
 
+        # Get the special token ID for [NONE]
+        special_token_id = self.tokenizer.convert_tokens_to_ids(self.special_token_for_none)
+
         for prompt, target in zip(batch["prompt"], batch["target"]):
+            # Use special token ID if any value is None or empty string
+            prompt = prompt if prompt else self.special_token_for_none
+            target = target if target else self.special_token_for_none
+
+            # Encode prompt and target
             encoded_prompt = self.tokenizer.encode(
                 self.tokenizer.bos_token + prompt,
                 add_special_tokens=False,
@@ -80,10 +90,11 @@ class DatasetProcessor:
                 truncation=True,
                 max_length=self.config.max_length - len(encoded_prompt),
             )
-            
+
             combined = encoded_prompt + encoded_target
             padding_length = self.config.max_length - len(combined)
 
+            # Pad with the tokenizer's pad token ID
             input_id = combined + [self.tokenizer.pad_token_id] * padding_length
             attention_mask = [1] * len(combined) + [0] * padding_length
             label = [-100] * len(encoded_prompt) + encoded_target + [-100] * padding_length
@@ -96,7 +107,7 @@ class DatasetProcessor:
             "input_ids": input_ids,
             "attention_mask": attention_masks,
             "labels": labels,
-            "label_g":copy.deepcopy(input_ids)
+            "label_g": copy.deepcopy(input_ids)
         }
 
     def process_dataset(self) -> DatasetDict:
@@ -123,4 +134,3 @@ class DatasetProcessor:
         except Exception as e:
             logger.error(f"Error processing dataset: {e}")
             raise
-

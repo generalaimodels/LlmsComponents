@@ -40,6 +40,7 @@ class DataTrainingArguments:
     keep_linebreaks: bool = field(default=True)
     input_column_names: List[str] = field(default_factory=list)  # List of input column names
     target_column_name: Optional[str] = field(default=None)       # Name of the target column for labels
+    max_length:Optional[str]=field(default=int(512))
 
     def __post_init__(self):
         if self.dataset_name is None and self.train_file is None and self.validation_file is None:

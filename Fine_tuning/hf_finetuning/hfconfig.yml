@@ -18,6 +18,7 @@ DataTrainingArguments:
   preprocessing_num_workers: 1
   validation_split_percentage: 10
   streaming: false
+  max_length: 512
 
 TrainingArguments:
   output_dir: "./outputs"

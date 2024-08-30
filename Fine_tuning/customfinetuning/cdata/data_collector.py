@@ -112,7 +112,10 @@ class ConcatDataset_batch(Dataset):
             })
 
     def __getitem__(self, idx):
-        return self.samples[idx]
+        if idx is not None:
+           return self.samples[idx]
+        else:
+            raise TypeError(f"Index must be an integer, not {type(idx).__name__}")
 
     def __len__(self):
         return len(self.samples)

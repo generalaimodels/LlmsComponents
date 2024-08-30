@@ -28,8 +28,8 @@ config1:
         - act
         - prompt #List[str] = None
       target_column: "prompt" # str = None
-      max_length:  512
-      batch_size:  32
+      max_length:  100
+      batch_size:  2
 
   modelconfig:
     ModelConfig:
@@ -50,7 +50,3 @@ config1:
       input_variables:
         - act
         - prompt
-
-  
-
-

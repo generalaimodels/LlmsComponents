@@ -13,5 +13,8 @@ from .data_loader import (
 from .dataprocessing import (
     PromptTemplate,
     DatasetProcessor,
-    
+    )
+
+from .dataprocessing_test import (
+    DatasetProcessorTest
     )

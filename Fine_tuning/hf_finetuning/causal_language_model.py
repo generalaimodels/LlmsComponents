@@ -305,7 +305,7 @@ def main(yaml_file_path: str):
 
     with training_args.main_process_first(desc="dataset map tokenization"):
         tokenized_datasets = raw_datasets.map(
-            lambda examples: tokenize_function(examples, input_column_names, target_column_name, tokenizer, tok_logger),
+            lambda examples: tokenize_function(examples, input_column_names, target_column_name, tokenizer, tok_logger,max_length=data_args.max_length),
             batched=True,
             num_proc=data_args.preprocessing_num_workers,
             remove_columns=column_names,
@@ -382,9 +382,9 @@ def main(yaml_file_path: str):
     logger.info("Training completed.")
 
 if __name__ == "__main__":
-    # try:
-    #     yaml_config_file = sys.argv[1]
-    # except IndexError:
-    #     raise ValueError("Please provide the path to the YAML configuration file as the first argument.")
+    try:
+        yaml_config_file = sys.argv[1]
+    except IndexError:
+        raise ValueError("Please provide the path to the YAML configuration file as the first argument.")
 
-    main(r"C:\Users\heman\Desktop\Coding\LlmsComponents\Fine_tuning\model_and_dataset_config.yml")
+    main(yaml_config_file)
