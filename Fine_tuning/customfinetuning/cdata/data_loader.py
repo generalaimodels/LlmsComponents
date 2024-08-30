@@ -1,5 +1,5 @@
 from datasets import load_dataset
-from finetuningconfig import DataConfig
+from customfinetuning.cconfig import DataConfig
 
 
 

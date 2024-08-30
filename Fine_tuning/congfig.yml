@@ -37,6 +37,8 @@ config1:
       cache_dir : './model'
       token : null 
       trust_remote_code : True
+
+      
   promptconfig:
     PromptTemplate:
       template: |

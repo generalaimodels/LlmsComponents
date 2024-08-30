@@ -5,8 +5,8 @@ from datasets import Dataset, DatasetDict
 from transformers import PreTrainedTokenizer
 
 
-from data_loader import DatasetLoader
-from finetuningconfig import DataConfig,DatasetConfig
+from .data_loader import DatasetLoader
+from customfinetuning.cconfig import DataConfig,DatasetConfig
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -123,5 +123,4 @@ class DatasetProcessor:
         except Exception as e:
             logger.error(f"Error processing dataset: {e}")
             raise
-
 

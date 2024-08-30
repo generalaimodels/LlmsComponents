@@ -1,9 +1,12 @@
 #!/usr/bin/env python
 # coding=utf-8
-from finetuningconfig import DataConfig, ModelConfig,DatasetConfig
-from datapreprocessing import PromptTemplate, DatasetProcessor
-from data_collector import ConcatDataset_batch
-from modelandtokenizer import ModelLoader
+import sys 
+from pathlib import Path
+sys.path.append(str(Path(__file__).resolve().parents[1]))
+from customfinetuning.cconfig import DataConfig, ModelConfig,DatasetConfig
+from customfinetuning.cdata import PromptTemplate, DatasetProcessor
+from customfinetuning.cdata.data_collector import ConcatDataset_batch,ConcatDataset
+from customfinetuning.cmodel.modelandtokenizer import ModelLoader
 from training_config import Config,load_config
 
 
@@ -44,7 +47,7 @@ dataset_dict = dataset_processor.process_dataset()
 
 
 try:
-    train_dataset = ConcatDataset_batch(dataset=dataset_dict['train'], chunk_size=512, batch_size=1)
+    train_dataset =ConcatDataset_batch(dataset=dataset_dict['train'], chunk_size=512, batch_size=1)
     eval_dataset = ConcatDataset_batch(dataset=dataset_dict['test'], chunk_size=512, batch_size=1)
 except KeyError as exc:
     raise RuntimeError(f"Training or testing datasets missing: {exc}")

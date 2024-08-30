@@ -1,7 +1,7 @@
 from typing import  Tuple
 from transformers import AutoModelForCausalLM, AutoTokenizer, AutoConfig
 import logging
-from finetuningconfig import ModelConfig
+from customfinetuning.cconfig import ModelConfig
 
 
 logging.basicConfig(level=logging.INFO)
