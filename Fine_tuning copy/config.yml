@@ -1,0 +1,62 @@
+config1:
+  datasetconfig:
+    DataConfig:
+      path: "fka/awesome-chatgpt-prompts" # string
+      name: null # Optional[str]
+      data_dir: null # Optional[str]
+      data_files: null # Optional[Union[str, Sequence[str], Mapping[str, Union[str, Sequence[str]]]]]
+      split: "train" # Optional[Union[str, Split]]
+      cache_dir: null # Optional[str]
+      features: null # Optional[Features]
+      download_config: null # Optional[DownloadConfig]
+      download_mode: null # Optional[Union[DownloadMode, str]]
+      verification_mode: null # Optional[Union[VerificationMode, str]]
+      keep_in_memory: null # Optional[bool]
+      save_infos: false # bool
+      revision: null # Optional[Union[str, Version]]
+      token: null # Optional[Union[bool, str]]
+      streaming: false # bool
+      num_proc: null # Optional[int]
+      storage_options: null # Optional[Dict]
+      trust_remote_code: null # Optional[bool]
+    DatasetConfig:
+      split: "train"
+      train_ratio : 0.8
+      eval_ratio: 0.1
+      test_ratio:  0.1
+      input_columns: 
+        - act
+        - prompt #List[str] = None
+      target_column: "prompt" # str = None
+      max_length:  100
+      batch_size:  2
+
+  modelconfig:
+    ModelConfig:
+      pretrained_model_name_or_path: "gpt2" # str
+      cache_dir : null
+      token : null 
+      trust_remote_code : False
+
+
+  promptconfig:
+    PromptTemplate:
+      template: |
+        You have to immerse yourself in a specific role:
+        ------------------------------------------------
+        Role Description:
+        act: {act}
+        Scenario:
+        prompt: {prompt}
+        
+        Instructions:
+          1. Embrace the persona of the role described above.
+          2. Consider the scenario provided and think about the context.
+          3. Respond as if you are truly in this situation, using the traits and mindset of the given role.
+          4. Ensure your actions and dialogue are consistent with the character's behavior and objectives.
+        
+        Good luck in your role!
+        ------------------------------------------------
+      input_variables:
+        - act
+        - prompt

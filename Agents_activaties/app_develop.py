@@ -174,7 +174,7 @@ def create_gradio_interface() -> gr.Blocks:
             background-color: #ea4335;
             color: white;
         }
-    """) as demo:
+    """,title="Darafa Team") as demo:
         
         gr.Markdown("<div id='interface-title'> 🧠 Great work need time </div>")
 
@@ -197,4 +197,4 @@ def create_gradio_interface() -> gr.Blocks:
 
 if __name__ == "__main__":
     demo = create_gradio_interface()
-    demo.launch(share=True,server_port=1430)
+    demo.launch(share=True,server_port=1430,inbrowser=True, )
