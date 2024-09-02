@@ -23,7 +23,7 @@ if sys.platform.startswith("win"):
 
 CONFIG = {
     "EMBEDDING_MODEL_NAME": "thenlper/gte-large",
-    "DATA_DIR": r"E:\LLMS\Fine-tuning\LlmsComponents\LLM_Components\chat_bot",
+    "DATA_DIR": r"C:\Users\heman\Desktop\Coding\LlmsComponents\LLM_Components\chat_bot",
     "CHUNK_SIZE": 512,
     "K": 5,  # Number of similar documents to retrieve
     "LLM_MODEL": "gpt-4o-mini",
@@ -152,7 +152,11 @@ Question: {question}"""
     ]
 
     return json.dumps(prompt_template, indent=2)
-
+config=CONFIG
+# Build the vector database
+vector_db = build_vector_database(
+    config["DATA_DIR"], config["EMBEDDING_MODEL_NAME"], config["CHUNK_SIZE"], config["K"]
+)
 
 def main(user_query: str, config: Dict[str, Any]) -> None:
     """
@@ -317,4 +321,4 @@ iface = gr.Interface(
 )
 
 if __name__ == "__main__":
-    iface.launch(share=True)
+    iface.launch(share=True, inbrowser=True, server_port=1440)
