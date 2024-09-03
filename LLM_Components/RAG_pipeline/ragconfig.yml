@@ -1,7 +1,7 @@
 config1:
   datasetconfig:
     RagDatasetConfig:
-      path: "fka/awesome-chatgpt-prompts" # string
+      path: "E:/LLMS/Fine-tuning/LlmsComponents/LLM_Components/output" # string
       name: null # Optional[str]
       data_dir: null # Optional[str]
       data_files: null # Optional[Union[str, Sequence[str], Mapping[str, Union[str, Sequence[str]]]]]
@@ -19,16 +19,21 @@ config1:
       num_proc: null # Optional[int]
       storage_options: null # Optional[Dict]
       trust_remote_code: null # Optional[bool]
+    customdataset:
+      customfolder: true
+      input_folder: "E:/LLMS/Fine-tuning/LlmsComponents/LLM_Components/Reinforcemt"  #Optional[str]
+      output_folder: "E:/LLMS/Fine-tuning/LlmsComponents/LLM_Components/output" #Optional[str]
+      max_workers :   4  #Optinonl[str]
   
   promptconfig:
     PromptTemplate:
       template: |
-        You have to immerse yourself in a specific role:
+        you advanced content summary analysis and make user happy with your response:
         ------------------------------------------------
         Role Description:
-        act: {act}
+        act: Summaize below content
         Scenario:
-        prompt: {prompt}
+        content: {text}
         
         Instructions:
           1. Embrace the persona of the role described above.
@@ -39,5 +44,5 @@ config1:
         Good luck in your role!
         ------------------------------------------------
       input_variables:
-        - act
-        - prompt
+        - text
+        

@@ -1,7 +1,7 @@
 
-from typing import Dict, List
+from typing import  List
 from datasets import load_dataset
-
+from rag_config import RagDatasetConfig
 
 
 
@@ -25,7 +25,7 @@ class PromptTemplate:
 class DatasetLoader:
     """Class to load datasets using a data configuration."""
 
-    def __init__(self, config):
+    def __init__(self, config :RagDatasetConfig):
         self.config = config
 
     def load(self):

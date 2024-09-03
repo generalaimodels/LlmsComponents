@@ -1,0 +1,6 @@
+CONFIG:
+  EMBEDDING_MODEL_NAME: "thenlper/gte-large"
+  DATA_DIR: "E:/LLMS/Fine-tuning/LlmsComponents/hf_agent"
+  CHUNK_SIZE: 512
+  K: 5  # Number of similar documents to retrieve
+  LLM_MODEL: "gpt-4o-mini"
