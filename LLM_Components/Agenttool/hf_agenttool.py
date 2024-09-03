@@ -31,7 +31,7 @@ class AdvancedPipeline:
         self.tools_collection = ToolCollection([
             self.image_qa_tool,
             self.document_qa_tool,
-            self.search_tool,
+            # self.search_tool,
             self.speech_to_text_tool,
             self.text_to_speech_tool,
             self.translation_tool
@@ -82,7 +82,7 @@ class AdvancedPipeline:
         """
         try:
             logger.debug("Converting speech to text...")
-            text = self.speech_to_text_tool.run(audio_path)
+            text = self.speech_to_text_tool(audio_path)
             logger.info("Speech to text conversion completed successfully.")
             return text
         except Exception as e:
@@ -99,7 +99,7 @@ class AdvancedPipeline:
         """
         try:
             logger.debug("Converting text to speech...")
-            audio_path = self.text_to_speech_tool.run(text, language=language)
+            audio_path = self.text_to_speech_tool(text, language=language)
             logger.info("Text to speech conversion completed successfully.")
             return audio_path
         except Exception as e:
@@ -116,7 +116,7 @@ class AdvancedPipeline:
         """
         try:
             logger.debug("Translating text...")
-            translation = self.translation_tool.run(text, target_language=target_language)
+            translation = self.translation_tool(text, target_language=target_language)
             logger.info("Text translation completed successfully.")
             return translation
         except Exception as e:
