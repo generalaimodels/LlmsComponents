@@ -128,20 +128,45 @@ def load_config(config_path: str) -> Dict[str, Any]:
 
 def get_emoji(text: str) -> str:
     """Get a relevant emoji based on the text content."""
-    if 'code' in text.lower():
-        return emoji.emojize(':computer:')
-    elif 'data' in text.lower():
-        return emoji.emojize(':bar_chart:')
-    elif 'question' in text.lower():
-        return emoji.emojize(':question:')
+    text_lower = text.lower()
+    if 'code' in text_lower:
+        return emoji.emojize(':computer:', language='alias')
+    elif 'data' in text_lower:
+        return emoji.emojize(':bar_chart:', language='alias')
+    elif 'question' in text_lower:
+        return emoji.emojize(':question:', language='alias')
+    elif 'file' in text_lower or 'document' in text_lower:
+        return emoji.emojize(':file_folder:', language='alias')
+    elif 'image' in text_lower or 'picture' in text_lower:
+        return emoji.emojize(':frame_with_picture:', language='alias')
+    elif 'text' in text_lower or 'content' in text_lower:
+        return emoji.emojize(':memo:', language='alias')
     else:
-        return emoji.emojize(':page_facing_up:')
-
+        return emoji.emojize(':page_facing_up:', language='alias')
+    
+def get_symbol(text: str) -> str:
+    """Get a relevant symbol based on the text content."""
+    text_lower = text.lower()
+    if 'code' in text_lower:
+        return '💻'
+    elif 'data' in text_lower:
+        return '📊'
+    elif 'question' in text_lower:
+        return '❓'
+    elif 'file' in text_lower or 'document' in text_lower:
+        return '📁'
+    elif 'image' in text_lower or 'picture' in text_lower:
+        return '🖼️'
+    elif 'text' in text_lower or 'content' in text_lower:
+        return '📝'
+    else:
+        return '📄'
 
 def create_advanced_visualization(df: pd.DataFrame, user_query: str) -> go.Figure:
     """Create an advanced, interactive visualization of document embeddings."""
+    df['symbol'] = df['extract'].apply(get_symbol)
     df['emoji'] = df['extract'].apply(get_emoji)
-    df['size_col'] = np.where(df['source'] == 'User query', 20, 10)
+    df['size_col'] = np.where(df['source'] == 'User query', 30, 15)
     
     unique_sources = df['source'].unique()
     color_map = {source: f'hsl({i*360/len(unique_sources)},70%,50%)' for i, source in enumerate(unique_sources)}
@@ -160,41 +185,57 @@ def create_advanced_visualization(df: pd.DataFrame, user_query: str) -> go.Figur
                 color=source_df['color'],
                 line=dict(width=2, color='DarkSlateGrey')
             ),
-            text=source_df['emoji'],
+            text=source_df['symbol'],  # Use symbol for visibility
             textposition="middle center",
             hoverinfo='text',
-            hovertext=source_df.apply(lambda row: f"Source: {row['source']}<br>Extract: {row['extract']}", axis=1),
+            hovertext=source_df.apply(lambda row: (
+                f"Source: {row['source']}<br>"
+                f"Extract: {row['extract']}<br>"
+                f"Emoji: {row['emoji']}"
+            ), axis=1),
             name=source
         ))
     
     fig.update_layout(
-        title="Document Embedding Visualization",
+        title={
+            'text': "Document Embedding Visualization",
+            'y':0.95,
+            'x':0.5,
+            'xanchor': 'center',
+            'yanchor': 'top'
+        },
         xaxis_title="Dimension 1",
         yaxis_title="Dimension 2",
         showlegend=True,
         legend_title="Document Sources",
         hovermode='closest',
         template='plotly_dark',
+        height=800,  # Increase height for better visibility
+        margin=dict(l=50, r=50, t=100, b=50)
     )
     
-    fig.add_annotation(
-        x=df[df['source'] == 'User query']['x'].values[0],
-        y=df[df['source'] == 'User query']['y'].values[0],
-        text="User Query",
-        showarrow=True,
-        arrowhead=2,
-        arrowsize=1,
-        arrowwidth=2,
-        arrowcolor="#636363",
-        ax=20,
-        ay=-40,
-        bordercolor="#c7c7c7",
-        borderwidth=2,
-        borderpad=4,
-        bgcolor="#ff7f0e",
-        opacity=0.8
-    )
+    # Add annotation for user query
+    user_query_point = df[df['source'] == 'User query']
+    if not user_query_point.empty:
+        fig.add_annotation(
+            x=user_query_point['x'].values[0],
+            y=user_query_point['y'].values[0],
+            text="User Query",
+            showarrow=True,
+            arrowhead=2,
+            arrowsize=1,
+            arrowwidth=2,
+            arrowcolor="#636363",
+            ax=20,
+            ay=-40,
+            bordercolor="#c7c7c7",
+            borderwidth=2,
+            borderpad=4,
+            bgcolor="#ff7f0e",
+            opacity=0.8
+        )
     
+    # Add info table
     fig.add_trace(
         go.Table(
             header=dict(values=["Query Information"],
@@ -267,7 +308,7 @@ def main():
                 }
             ])
             fig=create_advanced_visualization(df=df ,user_query=user_query)
-            fig.write_html("novel_embedding_visualization.html")
+            fig.write_html("Query_embedding_visualization.html")
             print("Visualization saved as novel_embedding_visualization.html")
         else:
             print("Failed to build vector database.")
