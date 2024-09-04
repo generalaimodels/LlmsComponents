@@ -1,0 +1,8 @@
+CONFIG:
+  EMBEDDING_MODEL_NAME: thenlper/gte-large
+  DATA_DIR: C:\Users\heman\Desktop\Coding\LlmsComponents\Fine_tuning\customfinetuning
+  CHUNK_SIZE: 512
+  NUM_SIMILAR: 5  # Number of similar documents to retrieve
+  LLM_MODEL: gpt-4o-mini
+  QUERY: Initialize ModelLoader with a ModelConfig instanceparam model_config An instance of ModelConfig with model details.
+    

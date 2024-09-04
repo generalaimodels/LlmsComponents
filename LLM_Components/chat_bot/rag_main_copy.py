@@ -53,7 +53,6 @@ def build_vector_database(
     data_dir: str, 
     embedding_model_name: str, 
     chunk_size: int, 
-    k: int
 ) -> Optional[AdvancedFAISS]:
     """
     Build a vector database from documents in the data directory.
