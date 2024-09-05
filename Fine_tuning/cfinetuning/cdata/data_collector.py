@@ -80,7 +80,7 @@ class ConcatDataset(Dataset):
         return len(self.samples)
 
 
-class ConcatDataset_batch(Dataset):
+class ConcatDatasetbatch(Dataset):
     def __init__(self, dataset, chunk_size=1024, batch_size=32):
         self.dataset = dataset
         self.chunk_size = chunk_size

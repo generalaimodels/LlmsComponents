@@ -2,7 +2,7 @@ from .data_collector import (
     LengthBasedBatchSampler,
     DistributedLengthBasedBatchSampler,
     ConcatDataset,
-    ConcatDataset_batch,
+    ConcatDatasetbatch,
     
     
     )

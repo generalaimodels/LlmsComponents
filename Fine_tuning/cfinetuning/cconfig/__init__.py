@@ -4,4 +4,5 @@ from .finetuningconfig import (
     DatasetConfig,
     ModelArguments,
     DataTrainingArguments,
+    CTrainingArguments
     )

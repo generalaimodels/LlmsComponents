@@ -6,7 +6,7 @@ from transformers import PreTrainedTokenizer
 
 
 from .data_loader import DatasetLoader
-from customfinetuning.cconfig import DataConfig,DatasetConfig
+from cfinetuning.cconfig import DataConfig,DatasetConfig
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -96,7 +96,6 @@ class DatasetProcessor:
             "input_ids": input_ids,
             "attention_mask": attention_masks,
             "labels": labels,
-            "label_g":copy.deepcopy(input_ids)
         }
 
     def process_dataset(self) -> DatasetDict:
