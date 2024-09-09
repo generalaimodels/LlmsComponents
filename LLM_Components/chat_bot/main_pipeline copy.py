@@ -251,8 +251,8 @@ def create_advanced_visualization(df: pd.DataFrame, user_query: str) -> go.Figur
     )
     
     return fig
-def main():
-    config = load_config(r"C:\Users\heman\Desktop\Coding\LlmsComponents\LLM_Components\chat_bot\ragconfig.yml")
+def main(file_path):
+    config = load_config(config_path=file_path)
     if not config:
         print("Exiting due to configuration load failure.")
         return
@@ -293,7 +293,7 @@ def main():
                     "y": documents_projected[i, 1],
                     "z": documents_projected[i, 2],
                     "source": docs_processed[i].metadata.get("file_path", "Unknown").split("/")[-1],
-                    "extract": docs_processed[i].page_content[:100] + "...",
+                    "extract": docs_processed[i].page_content[:150] + "...",
                     "type": "Document"
                 }
                 for i in range(len(docs_processed))
@@ -317,6 +317,3 @@ def main():
         print(f"Missing configuration key: {e}")
     except Exception as e:
         print(f"Unexpected error: {e}")
-
-if __name__ == "__main__":
-    main()
