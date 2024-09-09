@@ -15,7 +15,7 @@ import numpy as np
 import pandas as pd
 from evaluate import load
 from accelerate import Accelerator
-
+from torch.utils.data import DataLoader
 from datasets import load_metric
 from tqdm.auto import tqdm
 from transformers.file_utils import ExplicitEnum
@@ -253,7 +253,7 @@ def compute_metrics(metric, eval_pred: Tuple) -> Dict[str, float]:
 def evaluate(
     args,
     accelerator: Accelerator,
-    dataloader: torch.utils.data.DataLoader,
+    dataloader: DataLoader,
     eval_set: str,
     model: torch.nn.Module,
     checkpoint: str,

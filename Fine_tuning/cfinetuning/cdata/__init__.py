@@ -18,3 +18,9 @@ from .dataprocessing import (
 from .dataprocessing_test import (
     DatasetProcessorTest
     )
+
+from .tokenizerhf import (
+    Tokenizer,
+    process_data,
+    ChatFormat
+)

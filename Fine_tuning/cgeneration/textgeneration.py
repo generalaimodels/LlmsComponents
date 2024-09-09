@@ -258,5 +258,3 @@ class TextGenerator:
         self.device = torch.device(device)
         self.model.to(self.device)
         return self
-    
-
