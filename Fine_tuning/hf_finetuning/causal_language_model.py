@@ -33,7 +33,7 @@ logger = logging.getLogger(__name__)
 # Constants
 MODEL_CONFIG_CLASSES = list(MODEL_FOR_CAUSAL_LM_MAPPING.keys())
 MODEL_TYPES = tuple(conf.model_type for conf in MODEL_CONFIG_CLASSES)
-logger.info(f"Model types: {MODEL_TYPES}")
+logger.info(f"\nModel types: {MODEL_TYPES}")
 
 def load_yaml_config(yaml_file_path: str) -> Dict[str, Any]:
     """Load YAML configuration file."""
@@ -192,13 +192,14 @@ def main(yaml_file_path: str):
     model_args = ModelArguments(**config['ModelArguments'])
     data_args = DataTrainingArguments(**config["DataTrainingArguments"])
     training_args = TrainingArguments(**config["TrainingArguments"])
-    print(training_args,data_args,model_args)
+    
     # Send telemetry
     send_example_telemetry("run_clm", model_args, data_args)
 
     # Setup logging
     setup_logging(training_args)
     
+
     # Log the process summary
     logger.warning(
         f"Process rank: {training_args.local_rank}, device: {training_args.device}, "
@@ -206,6 +207,7 @@ def main(yaml_file_path: str):
         f"{training_args.parallel_mode.value == 'distributed'}, 16-bits training: {training_args.fp16}"
     )
     logger.info(f"Training/evaluation parameters {training_args}")
+    
 
     # Detect last checkpoint
     last_checkpoint = detect_last_checkpoint(training_args)
@@ -291,6 +293,8 @@ def main(yaml_file_path: str):
 
     # Configure model, tokenizer, and their configurations
     config, tokenizer, model = configure_model_and_tokenizer(model_args)
+
+    logger.info(f"\nModel config:{config}")
 
     # Resize token embeddings if necessary
     embedding_size = model.get_input_embeddings().weight.shape[0]
