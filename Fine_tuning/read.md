@@ -29,5 +29,4 @@ training_args:
 
 hub_repo_name: "your-username/your-model-name"
 
-
 ```
