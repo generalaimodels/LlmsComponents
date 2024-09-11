@@ -35,7 +35,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Constants
-CONFIG_FILE_PATH = Path(r"C:\Users\heman\Desktop\Coding\LlmsComponents\Fine_tuning\peftrecipes\lorafinetuning.yml")
+CONFIG_FILE_PATH = Path("/scratch/hemanth/Hemanth/Fine_tuning/peftrecipes/lorafinetuning.yml")
 DEFAULT_SAVE_PATH = 'best_weights'
 OUTPUT_DIR = 'output'
 LOGGING_DIR = 'logs'
@@ -89,6 +89,7 @@ prompt_template = PromptTemplate(**prompt_template_args)  # type: ignore
 model_config = ModelConfig(**model_loader_args)  # type: ignore
 
 peft_config=LoraConfig(**peft_loraconfig)
+
 
 
 # Initialize and load model and tokenizer

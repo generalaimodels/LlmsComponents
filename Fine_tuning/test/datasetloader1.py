@@ -98,7 +98,7 @@ class DatasetLoader(IterableDataset):
 #         "label_g": list(range(10000))
 #     }
 
-#     loader = DatasetLoader(dataset, batch_size=100, chunk_size=100, shuffle=True)
+#     loader = DatasetLoader(dataset, batch_size=1000, chunk_size=1000, shuffle=True)
     
 #     for batch in tqdm(loader, total=len(loader)):
 #         print(batch["labels"])

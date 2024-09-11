@@ -33,9 +33,9 @@ config1:
 
   modelconfig:
     ModelConfig:
-      pretrained_model_name_or_path: "gpt2" # str
+      pretrained_model_name_or_path: "microsoft/Phi-3.5-MoE-instruct" # str
       cache_dir : './model'
-      token : null 
+      token : "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" 
       trust_remote_code : True
 
       

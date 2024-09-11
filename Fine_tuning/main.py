@@ -32,7 +32,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Constants
-CONFIG_FILE_PATH = Path("E:/LLMS/Fine-tuning/LlmsComponents/Fine_tuning/ccongfig.yml")
+CONFIG_FILE_PATH = Path(r"E:\LLMS\Fine-tuning\LlmsComponents\Fine_tuning\examples\ccongfig.yml")
 DEFAULT_SAVE_PATH = 'best_weights'
 OUTPUT_DIR = 'output'
 LOGGING_DIR = 'logs'
@@ -73,39 +73,50 @@ def plot_training_progress(trainer: Trainer):
 
 config_data = load_config(CONFIG_FILE_PATH)
 
-# Extract configuration arguments using nested get method for better readability
+logger.info("Extract configuration arguments using nested get method for better readability ...")
+
 data_loader_args = config_data.get('config1', {}).get('datasetconfig', {}).get('DataConfig', {})
 data_preprocess_args = config_data.get('config1', {}).get('datasetconfig', {}).get('DatasetConfig', {})
 prompt_template_args = config_data.get('config1', {}).get('promptconfig', {}).get('PromptTemplate', {})
 model_loader_args = config_data.get('config1', {}).get('modelconfig', {}).get('ModelConfig', {})
+TrainingArguments_loader_args=config_data.get('config1', {}).get('trainingconfig', {}).get('CTrainingArguments', {})
 
-# Initialize configuration objects
+logger.info("Initialize configuration objects ...")
+
 data_config = DataConfig(**data_loader_args)  # type: ignore
 dataset_config = DatasetConfig(**data_preprocess_args)  # type: ignore
 prompt_template = PromptTemplate(**prompt_template_args)  # type: ignore
 model_config = ModelConfig(**model_loader_args)  # type: ignore
+training_args=TrainingArguments(**TrainingArguments_loader_args)
 
-# Initialize and load model and tokenizer
+logger.info("Initialize and load model and tokenizer ...")
+
 model_loader = ModelLoader(model_config)
 model, tokenizer = model_loader.load_model_and_tokenizer()
+
+
+
 
 if tokenizer.pad_token is None:
     tokenizer.pad_token = tokenizer.eos_token
 
 model_configuration = model_loader.get_config()
+logger.info(f"Model config file detail:{model_configuration}")
 
-# Initialize dataset processor with configurations
+
+logger.info("Initialize dataset processor with configurations...")
+
 dataset_processor = DatasetProcessor(
     dataloader_config=data_config,
     dataset_config=dataset_config,
     prompt_template=prompt_template,
     tokenizer=tokenizer
 )
-
-# Process datasets
+logger.info(" Process datasets...")
 processed_datasets: DatasetDict = dataset_processor.process_dataset()
 
-# Define a data collator for dynamic padding
+logger.info("Define a data collator for dynamic padding...")
+
 data_collator = DataCollatorWithPadding(
     tokenizer=tokenizer,
     padding='longest',
@@ -133,19 +144,8 @@ class SaveBestModelCallback(TrainerCallback):
         tokenizer.save_pretrained(self.save_path)
 
 
-# Initialize training arguments
-training_args = TrainingArguments(
-    output_dir=OUTPUT_DIR,
-    eval_strategy='epoch',
-    save_strategy='no',
-    logging_dir=LOGGING_DIR,
-    logging_steps=10,
-    do_train=True,
-    do_eval=True,
-)
-
-# Define the evaluation metric
 metric = load("accuracy")
+# logger.info(f"Define the evaluation metric {metric.__dict__ } ...")
 
 def compute_metrics(eval_pred: Tuple) -> Dict[str, float]:
     logits, labels = eval_pred

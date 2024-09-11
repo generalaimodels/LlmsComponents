@@ -33,10 +33,11 @@ config1:
 
   modelconfig:
     ModelConfig:
-      pretrained_model_name_or_path: "gpt2" # str
+      pretrained_model_name_or_path: "microsoft/Phi-3.5-mini-instruct" # str
       cache_dir : './model'
-      token : null 
+      token : "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" 
       trust_remote_code : True
+
 
       
   promptconfig:
@@ -53,9 +54,13 @@ config1:
   
   loraconfig:
     r: 8
-    target_modules: null
-    lora_alpha: 8
-    lora_dropout: 0.0
+    target_modules: [
+    'self_attn.qkv_proj', 
+    'self_attn.o_proj',
+    'mlp.gate_up_proj', 
+    'mlp.down_proj']
+    lora_alpha: 32
+    lora_dropout: 0.1
     fan_in_fan_out: false
     bias: none
     use_rslora: false
@@ -70,7 +75,7 @@ config1:
     loftq_config: {}
     use_dora: false
     layer_replication: null
-    runtime_config: 
+    
 
   trainingconfig:
     CTrainingArguments:

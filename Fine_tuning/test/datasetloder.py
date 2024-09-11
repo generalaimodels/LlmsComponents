@@ -139,25 +139,3 @@ class ConcatDataset(Dataset):
     def __len__(self) -> int:
         """Return the total number of samples in the dataset."""
         return len(self.samples)
-if __name__ == "__main__":
-    # Example usage and testing
-    class DummyDataset(Dataset):
-        def __init__(self, size: int = 1):
-            self.size = size
-
-        def __getitem__(self, idx: int) -> Dict[str, List[int]]:
-            return {
-                "input_ids": np.random.randint(0, 1000, 50).tolist(),
-                "attention_mask": np.random.randint(0, 2, 50).tolist(),
-                "labels": np.random.randint(0, 10, 50).tolist(),
-                "label_g": np.random.randint(0, 5, 50).tolist()
-            }
-
-        def __len__(self) -> int:
-            return self.size
-
-    # Create and test the ConcatDataset
-    dummy_dataset = DummyDataset()
-    concat_dataset = ConcatDataset(dummy_dataset, chunk_size=512)
-    print(f"Number of samples: {len(concat_dataset)}")
-    print(f"First sample: {concat_dataset[0]}")
