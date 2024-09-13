@@ -16,6 +16,15 @@ from transformers import (
     CONFIG_MAPPING,
     MODEL_FOR_CAUSAL_LM_MAPPING
 )
+
+    
+from peft import (
+    LoraConfig,            
+    get_peft_model
+)
+
+
+
 import transformers
 from transformers.utils import send_example_telemetry, logging as hf_logging
 from transformers.trainer_utils import get_last_checkpoint
@@ -192,6 +201,7 @@ def main(yaml_file_path: str):
     # Mapping YAML values to dataclasses
     model_args = ModelArguments(**config['ModelArguments'])
     data_args = DataTrainingArguments(**config["DataTrainingArguments"])
+    peft_config=LoraConfig(**config["LoraConfig"])
     training_args = TrainingArguments(**config["TrainingArguments"])
     
     # Send telemetry
@@ -295,8 +305,12 @@ def main(yaml_file_path: str):
     
 
     # Configure model, tokenizer, and their configurations
-    config, tokenizer, model = configure_model_and_tokenizer(model_args)
+    config, tokenizer, base_model = configure_model_and_tokenizer(model_args)
     
+    # base and loraconfigmodel added
+    model = get_peft_model(base_model, peft_config)
+    logger.info(f"Lora model parameter {model.print_trainable_parameters()}")
+
 
     logger.info(f"\nModel config:{config}")
 

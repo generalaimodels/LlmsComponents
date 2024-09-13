@@ -132,7 +132,7 @@ def create_plots(data: Dict):
 
 def main():
     # Load the trainer state data
-    file_path = r'/scratch/hemanth/output/trainer_state.json'
+    file_path = r'E:\LLMS\Fine-tuning\trainstate.json'
     trainer_state = load_data(file_path)
     
     # Extract data from log history
