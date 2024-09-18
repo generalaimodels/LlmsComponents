@@ -1,6 +1,6 @@
 CONFIG:
   EMBEDDING_MODEL_NAME: BAAI/bge-large-en-v1.5
-  DATA_DIR: C:\Users\heman\Desktop\Coding\LlmsComponents\Fine_tuning\
+  DATA_DIR: C:/Users/heman/Desktop/Coding/LlmsComponents/inference
   CHUNK_SIZE: 512
   NUM_SIMILAR: 5  # Number of similar documents to retrieve
   LLM_MODEL: gpt-4o-mini

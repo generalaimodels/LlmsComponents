@@ -1,0 +1,15 @@
+torch 
+transformers 
+accelerate 
+bitsandbytes 
+langchain 
+faiss-cpu   
+datasets 
+langchain-community 
+langchain_huggingface
+pandas
+pyyaml
+python-docx
+python-pptx
+PyMuPDF
+nltk
