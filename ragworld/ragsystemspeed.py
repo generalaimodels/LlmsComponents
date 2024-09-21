@@ -275,4 +275,3 @@ def query_vector_store(vector_store: FAISS, query: str, k: int = 5) -> List[Dict
         }
         results.append(result)
     return results
-
