@@ -70,7 +70,7 @@ def save_to_csv(data: List[Dict[str, str]], output_file: str) -> None:
 
 def main():
     peft_model_id = "/scratch/hemanth/peft_weights"
-    base_path = "/scratch/hemanth/model/models--microsoft--Phi-3.5-mini-instruct/snapshots/ccf028fc8e1b3ab750a7c55b22792f57ba69f216"
+    base_path = " "
     output_file = "inference_results.json"
 
     try:
