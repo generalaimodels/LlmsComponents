@@ -63,4 +63,3 @@ def visualize_directory_structure(directory: Union[str, Path]) -> None:
     except Exception as generic_error:
         print(f"[bold red]An unexpected error occurred:[/] {generic_error}")
 
-

@@ -234,7 +234,7 @@ def model_summary_update(model: nn.Module, save_path: Optional[str] = "model_sum
 
     if save_path:
         html = console.export_html(clear=False)  # Removed code_format parameter
-        with open(save_path, "w") as f:
+        with open(save_path, "w",encoding="utf-8") as f:
             f.write(html)
         print(f"Summary saved as {save_path}")
 
